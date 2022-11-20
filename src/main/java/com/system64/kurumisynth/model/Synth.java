@@ -13,9 +13,10 @@ public class Synth {
 
     public void setAlgorithm(byte algorithm) {
         this.algorithm = algorithm;
+        System.out.println(this.algorithm);
     }
 
-    private byte algorithm = 0;
+    private byte algorithm = 1;
 
     public byte getSmoothWin() {
         return smoothWin;
@@ -40,7 +41,7 @@ public class Synth {
     public ArrayList<Integer> output = new ArrayList<Integer>();
 
     public Synth() {
-        for(int i = 0; i < operators.length-1; i ++)
+        for(int i = 0; i < operators.length; i ++)
             if(i < 3)
                 operators[i] = new Operator();
             else
@@ -62,6 +63,8 @@ public class Synth {
             outList.add(tmp);
         }
         waveOutput = outList;
+        System.out.println(myArrayList);
+        System.out.println(operators[3]);
     }
 
     private void smooth(ArrayList<Float> arrayToSmooth)

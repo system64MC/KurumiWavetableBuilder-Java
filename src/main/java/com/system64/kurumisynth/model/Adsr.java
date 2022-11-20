@@ -40,4 +40,12 @@ public class Adsr {
         this.decay = 0;
         this.sustain = 1;
     }
+
+    @Override
+    public String toString() {
+        return "[ADSR Enveloppe]" +
+                "\nAttack : " + this.attack +
+                "\nDecay : " + this.decay +
+                "\nSustain : " + this.sustain;
+    }
 }

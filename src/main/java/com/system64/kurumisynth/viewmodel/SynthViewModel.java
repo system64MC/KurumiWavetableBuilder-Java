@@ -17,14 +17,22 @@ public class SynthViewModel {
     public SynthViewModel() {
         synthModel = new Synth();
         System.out.println("Init Synth VM");
-        algProp().addListener(e -> setAlgPropAction());
+        SetListeners();
+        //algProp().addListener(e -> setAlgPropAction());
     }
 
-    @FXML
+    private void SetListeners() {
+        algProp.addListener((obs, oldVal, newVal) -> {
+            synthModel.setAlgorithm(newVal.byteValue());
+            synthModel.synthesize();
+        });
+    }
+
+
     public IntegerProperty algProp() {
         //return algProp;
         //System.out.println("EEEEE");
-        return  new SimpleIntegerProperty(synthModel.getAlgorithm());
+        return this.algProp;
     }
 
     public void setAlgPropAction() {

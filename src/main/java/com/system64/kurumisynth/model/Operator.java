@@ -9,6 +9,16 @@ import static org.controlsfx.tools.Utils.clamp;
 public class Operator {
     private Adsr adsr;
 
+    public int[] getWavetable() {
+        return wavetable;
+    }
+
+    public void setWavetable(int[] wavetable) {
+        this.wavetable = wavetable;
+    }
+
+    private int[] wavetable = {16, 25, 30, 31, 30, 29, 26, 25, 25, 28, 31, 28, 18, 11, 10, 13, 17, 20, 22, 20, 15, 6, 0, 2, 6, 5, 3, 1, 0, 0, 1, 4};
+
     private ArrayList<Integer> customVolEnv = new ArrayList<Integer>();
 
     public boolean isCustomVolumeEnv() {
@@ -211,5 +221,16 @@ public class Operator {
         if(customVolumeEnv)
             return customEnv(mac);
         return adsr(mac);
+    }
+
+    @Override
+    public String toString() {
+        return  "[FM Operator]" +
+                "\nTL : " + this.tl +
+                "\nWaveform : " + this.waveformId +
+                "\nMult : " + this.mult +
+                "\nPhase : " + this.phase +
+                "\nDetune : " + this.detune +
+                "\nFeedback : " + this.feedback;
     }
 }
