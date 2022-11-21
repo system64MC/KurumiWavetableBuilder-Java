@@ -1,5 +1,6 @@
 package com.system64.kurumisynth.view;
 
+import com.system64.kurumisynth.Main;
 import com.system64.kurumisynth.model.Synth;
 import com.system64.kurumisynth.viewmodel.SynthViewModel;
 import javafx.beans.property.IntegerProperty;
@@ -7,13 +8,19 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 
 import java.io.File;
+import java.io.IOException;
 
 public class SynthView {
     private SynthViewModel synthVM;
@@ -32,7 +39,10 @@ public class SynthView {
     private ImageView algDisplay;
 
     @FXML
-    private ListView<OperatorView> opList = new ListView<>();
+    private ScrollPane opList;
+
+    @FXML
+    private VBox opBox;
 
     @FXML
     void initialize() {
@@ -42,10 +52,15 @@ public class SynthView {
         algDisplay.setViewport(new Rectangle2D(algSlider.getValue() * 128, 0.0, 128, 64.0));
         addListeners();
 
-        for(int i = 0; i < 4; i++)
-        {
-            opList.getItems().add(new OperatorView());
-        }
+        //var myOpView = new OperatorView();
+        //var myView = new SynthView();
+
+    }
+
+    void loadOperatorsUI() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("operator.fxml"));
+        Node myVbox = fxmlLoader.load();
+        opBox.getChildren().add(myVbox);
     }
     void doBindings() {
         //synthVM.algProp()

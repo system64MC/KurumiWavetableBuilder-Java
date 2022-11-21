@@ -13,6 +13,7 @@ public class OperatorView {
     @FXML
     void initialize() {
         opVM = new OperatorViewModel();
+        //tlSlider = new Slider(10, 10, 10);
     }
 
 }

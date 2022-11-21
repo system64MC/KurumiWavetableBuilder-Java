@@ -48,6 +48,7 @@
 
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ScrollPane?>
 <VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.system64.kurumisynth.view.SynthView" style="-fx-background-color: #14161F;">
   <children>
     <MenuBar VBox.vgrow="NEVER">
@@ -165,7 +166,14 @@
                   </VBox>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <ListView fx:id="opList" prefHeight="330.0" prefWidth="631.0" />
+                         <ScrollPane fx:id="opList" prefHeight="330.0" prefWidth="631.0">
+                             <VBox fx:id="opBox">
+                                 <fx:include fx:id="n1" source="operator.fxml"/>
+                                 <fx:include fx:id="n2" source="operator.fxml"/>
+                                 <fx:include fx:id="n3" source="operator.fxml"/>
+                                 <fx:include fx:id="n4" source="operator.fxml"/>
+                             </VBox>
+                         </ScrollPane>
                      </children>
                   </AnchorPane>
                </children>
