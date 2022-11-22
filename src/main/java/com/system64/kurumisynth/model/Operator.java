@@ -2,9 +2,10 @@ package com.system64.kurumisynth.model;
 
 import java.util.ArrayList;
 
+import static com.sun.javafx.util.Utils.clamp;
 import static com.system64.kurumisynth.model.Globals.macLen;
 import static com.system64.kurumisynth.model.Globals.macro;
-import static org.controlsfx.tools.Utils.clamp;
+//import static org.controlsfx.tools.Utils.clamp;
 
 public class Operator {
     private Adsr adsr;
@@ -123,7 +124,9 @@ public class Operator {
     }
 
     public void setTl(float tl) {
+
         this.tl = tl;
+        System.out.println("New TL : " + this.tl);
     }
 
     private float tl;
@@ -148,6 +151,7 @@ public class Operator {
         this.feedback = 0;
         this.prev = 0;
         this.customVolumeEnv = false;
+        Globals.synth.insertOp(this);
     }
 
     public Operator(float tl, int attack, int decay, float sustain, int waveformId, int mult, float phase) {
@@ -162,6 +166,7 @@ public class Operator {
         this.feedback = 0;
         this.prev = 0;
         this.customVolumeEnv = false;
+        Globals.synth.insertOp(this);
     }
 
     private float pGetPhase() {
@@ -176,6 +181,7 @@ public class Operator {
         return feedback * (prev / 6 * mult);
     }
     public float oscillate(float x) {
+        //System.out.println("X = " + (float) Math.sin((x * mult * 2 * Math.PI) + (phase * Math.PI * 2 + (pGetPhase() * Math.PI * 2))));
         switch (this.waveformId)
         {
             case 0: // 0 - Sine
@@ -190,9 +196,9 @@ public class Operator {
     }
 
     private float adsr(int mac) {
-        var atk = adsr.getAttack();
-        var dec = adsr.getDecay();
-        var sus = adsr.getSustain();
+        int atk = adsr.getAttack();
+        int dec = adsr.getDecay();
+        float sus = adsr.getSustain();
         // Attack
         if(mac <= atk)
         {
@@ -213,13 +219,15 @@ public class Operator {
             float decVal = (sus - tl) * tick + tl;
             return decVal < sus ? sus : decVal;
         }
-
-        return 0;
+        System.out.println("Returning 0");
+        return 1;
     }
 
     public float getVolume(int mac) {
         if(customVolumeEnv)
+        {
             return customEnv(mac);
+        }
         return adsr(mac);
     }
 

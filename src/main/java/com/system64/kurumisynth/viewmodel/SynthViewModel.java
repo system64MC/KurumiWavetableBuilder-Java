@@ -1,9 +1,11 @@
 package com.system64.kurumisynth.viewmodel;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import com.system64.kurumisynth.model.Globals;
 import com.system64.kurumisynth.model.Synth;
-import javafx.fxml.FXML;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleListProperty;
 
 public class SynthViewModel {
     private IntegerProperty algProp = new SimpleIntegerProperty();
@@ -11,21 +13,45 @@ public class SynthViewModel {
     private IntegerProperty gainProp = new SimpleIntegerProperty();
     private IntegerProperty macroLenProp = new SimpleIntegerProperty();
     private IntegerProperty macroProp = new SimpleIntegerProperty();
+    private ListProperty opList = new SimpleListProperty();
+    private ListProperty waveOutProp = new SimpleListProperty();
+    private IntegerProperty waveLenProp = new SimpleIntegerProperty();
+    private IntegerProperty waveHeiProp = new SimpleIntegerProperty();
 
     private Synth synthModel;
 
     public SynthViewModel() {
         synthModel = new Synth();
+        Globals.synth = synthModel;
+        waveLenProp.set(Globals.waveLen);
+        waveHeiProp.set(Globals.waveHeight);
         System.out.println("Init Synth VM");
-        SetListeners();
+        setListeners();
         //algProp().addListener(e -> setAlgPropAction());
     }
 
-    private void SetListeners() {
+    private void setListeners() {
         algProp.addListener((obs, oldVal, newVal) -> {
             synthModel.setAlgorithm(newVal.byteValue());
             synthModel.synthesize();
+            Globals.drawWaveOut();
         });
+
+        waveLenProp.addListener((obs, oldVal, newVal) -> {
+            Globals.waveLen = newVal.intValue();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+
+        waveHeiProp.addListener((obs, oldVal, newVal) -> {
+            Globals.waveHeight = newVal.intValue();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+    }
+
+    public ListProperty waveOutProp() {
+        return new SimpleListProperty();
     }
 
 
@@ -44,6 +70,13 @@ public class SynthViewModel {
         return new SimpleIntegerProperty(2);
     }
 
+    public IntegerProperty waveLenProp() {
+        return this.waveLenProp;
+    }
+
+    public IntegerProperty waveHeiProp() {
+        return this.waveHeiProp;
+    }
     public IntegerProperty gainProp() {
 
         //return gainProp;

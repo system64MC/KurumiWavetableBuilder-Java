@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import static com.system64.kurumisynth.model.Globals.*;
 
 public class Synth {
-    private Operator[] operators = new Operator[4];
+    //private Operator[] operators = new Operator[4];
+    private ArrayList<Operator> operators = new ArrayList<>();
 
     public byte getAlgorithm() {
         return algorithm;
@@ -16,7 +17,15 @@ public class Synth {
         System.out.println(this.algorithm);
     }
 
-    private byte algorithm = 1;
+    public void insertOp(Operator op) {
+        operators.add(op);
+    }
+
+    public Operator getOpIndex(int index) {
+        return operators.get(index);
+    }
+
+    private byte algorithm = 0;
 
     public byte getSmoothWin() {
         return smoothWin;
@@ -41,30 +50,31 @@ public class Synth {
     public ArrayList<Integer> output = new ArrayList<Integer>();
 
     public Synth() {
-        for(int i = 0; i < operators.length; i ++)
+        /*for(int i = 0; i < operators.length; i ++)
             if(i < 3)
                 operators[i] = new Operator();
             else
-                operators[i] = new Operator(1.0f, 0, 0, 1.0f, 0, 1, 0f);
+                operators[i] = new Operator(1.0f, 0, 0, 1.0f, 0, 1, 0f);*/
     }
 
     public void synthesize() {
-        var myArrayList = new ArrayList<Float>();
-        for (var x = 0; x < waveLen; x++)
+        ArrayList<Float> myArrayList = new ArrayList<Float>();
+        for (int x = 0; x < waveLen; x++)
         {
             myArrayList.add(fm(x));
         }
         // Smoothing here
-        var outList = new ArrayList<Integer>();
-        for(int c = 0; c < waveLen; c++);
+        ArrayList<Integer> outList = new ArrayList<Integer>();
+        for(int c = 0; c < waveLen; c++)
         {
-            //int tmp = Math.round((myArrayList.get(c) + 1) * (waveHeight / 2));
-            int tmp = 0;
+            System.out.println(myArrayList.get(c));
+            int tmp = Math.round((myArrayList.get(c) + 1) * ((float) waveHeight / 2));
+            //System.out.println(tmp);
             outList.add(tmp);
         }
         waveOutput = outList;
-        System.out.println(myArrayList);
-        System.out.println(operators[3]);
+        //System.out.println(myArrayList);
+        //System.out.println(operators[3]);
     }
 
     private void smooth(ArrayList<Float> arrayToSmooth)
@@ -72,11 +82,15 @@ public class Synth {
 
     }
 
-    public float fm(int x) {
-        var op0 = operators[0];
-        var op1 = operators[1];
-        var op2 = operators[2];
-        var op3 = operators[3];
+    public float fm(float x) {
+        Operator op0 = operators.get(0);
+        Operator op1 = operators.get(1);
+        Operator op2 = operators.get(2);
+        Operator op3 = operators.get(3);
+
+        x = x / waveLen;
+        System.out.println(x);
+        //System.out.println(operators.size());
 
         switch (algorithm)
         {
@@ -89,18 +103,20 @@ public class Synth {
                 */
 
                 float s1 = op0.oscillate(x + op0.getFeedback()) * op0.getVolume(macro);
-                float s2 = op0.oscillate(x + s1 + op1.getFeedback()) * op1.getVolume(macro);
-                float s3 = op0.oscillate(x + s2 + op2.getFeedback()) * op2.getVolume(macro);
-                float s4 = op0.oscillate(x + s3 + op3.getFeedback()) * op3.getVolume(macro);
-
+                float s2 = op1.oscillate(x + s1 + op1.getFeedback()) * op1.getVolume(macro);
+                float s3 = op2.oscillate(x + s2 + op2.getFeedback()) * op2.getVolume(macro);
+                float s4 = op3.oscillate(x + s3 + op3.getFeedback()) * op3.getVolume(macro);
+                //float s4 = op3.oscillate(x) * 1;
+                //System.out.println("S4 = " + op3.getVolume(macro));
                 return s4;
             }
         }
         float s1 = op0.oscillate(x + op0.getFeedback()) * op0.getVolume(macro);
-        float s2 = op0.oscillate(x + s1 + op1.getFeedback()) * op1.getVolume(macro);
-        float s3 = op0.oscillate(x + s2 + op2.getFeedback()) * op2.getVolume(macro);
-        float s4 = op0.oscillate(x + s3 + op3.getFeedback()) * op3.getVolume(macro);
-
+        float s2 = op1.oscillate(x + s1 + op1.getFeedback()) * op1.getVolume(macro);
+        float s3 = op2.oscillate(x + s2 + op2.getFeedback()) * op2.getVolume(macro);
+        float s4 = op3.oscillate(x + s3 + op3.getFeedback()) * op3.getVolume(macro);
+        //float s4 = op3.oscillate(x) * 1;
+        //System.out.println("S4 = " + s4);
         return s4;
     }
 }
