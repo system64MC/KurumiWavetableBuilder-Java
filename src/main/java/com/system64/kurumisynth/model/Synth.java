@@ -27,6 +27,44 @@ public class Synth {
 
     private byte algorithm = 0;
 
+    public int getMacLen() {
+        return macLen;
+    }
+
+    public void setMacLen(int macLen) {
+        this.macLen = macLen;
+    }
+
+    public int getMacro() {
+        return macro;
+    }
+
+    public void setMacro(int macro) {
+        this.macro = macro;
+    }
+
+    private int waveLen = 32;
+
+    public int getWaveLen() {
+        return waveLen;
+    }
+
+    public void setWaveLen(int waveLen) {
+        this.waveLen = waveLen;
+    }
+
+    public int getWaveHeight() {
+        return waveHeight;
+    }
+
+    public void setWaveHeight(int waveHeight) {
+        this.waveHeight = waveHeight;
+    }
+
+    private int waveHeight = 31;
+    private int macLen = 64;
+    private int macro = 0;
+
     public byte getSmoothWin() {
         return smoothWin;
     }
@@ -61,7 +99,7 @@ public class Synth {
         ArrayList<Float> myArrayList = new ArrayList<Float>();
         for (int x = 0; x < waveLen; x++)
         {
-            myArrayList.add(fm(x));
+            myArrayList.add(fm(x) * gain);
         }
         // Smoothing here
         ArrayList<Integer> outList = new ArrayList<Integer>();
@@ -83,6 +121,8 @@ public class Synth {
     }
 
     public float fm(float x) {
+        if(operators.size() < 4)
+            return 0;
         Operator op0 = operators.get(0);
         Operator op1 = operators.get(1);
         Operator op2 = operators.get(2);
@@ -102,21 +142,23 @@ public class Synth {
                 1 --> 2 --> 3 --> 4 --> Out
                 */
 
-                float s1 = op0.oscillate(x + op0.getFeedback()) * op0.getVolume(macro);
-                float s2 = op1.oscillate(x + s1 + op1.getFeedback()) * op1.getVolume(macro);
-                float s3 = op2.oscillate(x + s2 + op2.getFeedback()) * op2.getVolume(macro);
-                float s4 = op3.oscillate(x + s3 + op3.getFeedback()) * op3.getVolume(macro);
+                float s1 = op0.oscillate(x + op0.getFB()) * op0.getVolume(macro);
+                float s2 = op1.oscillate(x + s1 + op1.getFB()) * op1.getVolume(macro);
+                float s3 = op2.oscillate(x + s2 + op2.getFB()) * op2.getVolume(macro);
+                float s4 = op3.oscillate(x + s3 + op3.getFB()) * op3.getVolume(macro);
+                op3.setPrev(s4);
                 //float s4 = op3.oscillate(x) * 1;
                 //System.out.println("S4 = " + op3.getVolume(macro));
                 return s4;
             }
         }
-        float s1 = op0.oscillate(x + op0.getFeedback()) * op0.getVolume(macro);
-        float s2 = op1.oscillate(x + s1 + op1.getFeedback()) * op1.getVolume(macro);
-        float s3 = op2.oscillate(x + s2 + op2.getFeedback()) * op2.getVolume(macro);
-        float s4 = op3.oscillate(x + s3 + op3.getFeedback()) * op3.getVolume(macro);
+        float s1 = op0.oscillate(x + op0.getFB()) * op0.getVolume(macro);
+        float s2 = op1.oscillate(x + s1 + op1.getFB()) * op1.getVolume(macro);
+        float s3 = op2.oscillate(x + s2 + op2.getFB()) * op2.getVolume(macro);
+        float s4 = op3.oscillate(x + s3 + op3.getFB()) * op3.getVolume(macro);
+        op3.setPrev(s4);
         //float s4 = op3.oscillate(x) * 1;
-        //System.out.println("S4 = " + s4);
+        //System.out.println("S4 = " + op3.getVolume(macro));
         return s4;
     }
 }

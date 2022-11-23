@@ -113,31 +113,37 @@
                                        snapToTicks="true"
 
                                />
-                               <Label layoutX="158.0" layoutY="-1.0" text="Algorithm" style="-fx-text-fill: #ffff9e;"/>
+                               <Label fx:id="algLabel" layoutX="158.0" layoutY="-1.0" text="Algorithm : 0" style="-fx-text-fill: #ffff9e;"/>
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <Slider fx:id="gainSlider" blockIncrement="1.0" max="12.0" />
-                              <Label layoutX="158.0" layoutY="-1.0" text="Gain" style="-fx-text-fill: #ffff9e;"/>
+                               <Slider fx:id="gainSlider"
+                                       blockIncrement="0.01"
+                                       max="4.0"
+                                       min="0"
+                                       majorTickUnit="0.01"
+                                       snapToTicks="true"
+                               />
+                              <Label fx:id="gainLabel" layoutX="158.0" layoutY="-1.0" text="Gain : 1" style="-fx-text-fill: #ffff9e;"/>
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <Slider fx:id="smoothSlider" blockIncrement="1.0" max="12.0" />
-                              <Label layoutX="158.0" layoutY="-1.0" text="Avg. Filter window" style="-fx-text-fill: #ffff9e;"/>
+                              <Slider fx:id="smoothSlider" blockIncrement="1.0" min="1" max="128.0" />
+                              <Label fx:id="smoothLabel" layoutX="158.0" layoutY="-1.0" text="Avg. Filter window : 1" style="-fx-text-fill: #ffff9e;"/>
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <Slider fx:id="macLenSlider" blockIncrement="1.0" max="12.0" />
-                              <Label layoutX="158.0" layoutY="-1.0" text="Macro Length" style="-fx-text-fill: #ffff9e;"/>
+                              <Slider fx:id="macLenSlider" blockIncrement="1.0" min="1" max="256.0" />
+                              <Label fx:id="macLenLabel" layoutX="158.0" layoutY="-1.0" text="Macro Length : 64" style="-fx-text-fill: #ffff9e;"/>
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <Slider fx:id="macSlider" blockIncrement="1.0" max="12.0" />
-                              <Label layoutX="158.0" layoutY="-1.0" text="Wave sequence" style="-fx-text-fill: #ffff9e;"/>
+                              <Slider fx:id="macSlider" blockIncrement="1.0" max="63.0" />
+                              <Label fx:id="macLabel" layoutX="158.0" layoutY="-1.0" text="Wave sequence : 0" style="-fx-text-fill: #ffff9e;"/>
                            </children>
                         </AnchorPane>
                          <TextField editable="false" fx:id="waveOutTextField">
@@ -162,7 +168,7 @@
                                            majorTickUnit="1.0"
                                            snapToTicks="true"
                                    />
-                                   <Label layoutY="-1.0" text="Length" style="-fx-text-fill: #ffff9e;"/>
+                                   <Label fx:id="lenLabel" layoutY="-1.0" text="Length : 32" style="-fx-text-fill: #ffff9e;"/>
                                </HBox>
 
                            </children>
@@ -178,7 +184,7 @@
                                            majorTickUnit="1.0"
                                            snapToTicks="true"
                                    />
-                                   <Label layoutY="-1.0" text="Height" style="-fx-text-fill: #ffff9e;"/>
+                                   <Label fx:id="heiLabel" layoutY="-1.0" text="Height : 31" style="-fx-text-fill: #ffff9e;"/>
                                </HBox>
                            </children>
                         </AnchorPane>
@@ -187,7 +193,7 @@
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
                          <ScrollPane fx:id="opList" prefHeight="330.0" prefWidth="631.0">
-                             <VBox fx:id="opBox">
+                             <VBox spacing="20" fx:id="opBox">
 
                              </VBox>
                          </ScrollPane>

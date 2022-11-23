@@ -1,10 +1,10 @@
-com\system64\kurumisynth\viewmodel\AdsrViewModel.class
 com\system64\kurumisynth\viewmodel\SynthViewModel.class
-com\system64\kurumisynth\model\Globals.class
-com\system64\kurumisynth\model\Synth.class
-com\system64\kurumisynth\view\OperatorView.class
-com\system64\kurumisynth\view\SynthView.class
 com\system64\kurumisynth\Main.class
 com\system64\kurumisynth\model\Adsr.class
 com\system64\kurumisynth\model\Operator.class
 com\system64\kurumisynth\viewmodel\OperatorViewModel.class
+com\system64\kurumisynth\viewmodel\AdsrViewModel.class
+com\system64\kurumisynth\model\Globals.class
+com\system64\kurumisynth\model\Synth.class
+com\system64\kurumisynth\view\OperatorView.class
+com\system64\kurumisynth\view\SynthView.class

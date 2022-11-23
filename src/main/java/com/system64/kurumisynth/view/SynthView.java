@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -16,11 +17,26 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import sun.misc.BASE64Decoder;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 
+import static com.sun.javafx.util.Utils.clamp;
+
 public class SynthView {
+    @FXML
+    private Label lenLabel;
+    @FXML
+    private Label heiLabel;
+    @FXML
+    private Label macLabel;
+    @FXML
+    private Label macLenLabel;
+    @FXML
+    private Label gainLabel;
     private SynthViewModel synthVM;
     @FXML
     private Slider algSlider;
@@ -55,15 +71,27 @@ public class SynthView {
     private Slider heiSlider;
 
     @FXML
+    private Label algLabel;
+
+    @FXML
     void initialize() {
         synthVM = new SynthViewModel();
+        Globals.txtField = this.waveOutTextField;
+        Globals.setStringTextField();
+        waveOutTextField.setOnMouseClicked(e -> {
+            copyToClipboard();
+        });
+        Globals.waveDrawCvs = waveDrawCvs;
 
         //algDisplay.setImage(image);
+
         doBindings();
         algDisplay.setViewport(new Rectangle2D(algSlider.getValue() * 128, 0.0, 128, 64.0));
+        gainSlider.setValue(1);
+        macLenSlider.setValue(Globals.synth.getMacLen());
         addListeners();
         //var myView = new SynthView();
-        Globals.waveDrawCvs = waveDrawCvs;
+
 
         try {
             loadOperatorsUI();
@@ -112,11 +140,14 @@ public class SynthView {
         macLenSlider.valueProperty().bindBidirectional(synthVM.macroLenProp());
         lenSlider.valueProperty().bindBidirectional(synthVM.waveLenProp());
         heiSlider.valueProperty().bindBidirectional(synthVM.waveHeiProp());
+        gainSlider.valueProperty().bindBidirectional(synthVM.gainProp());
     }
     void addListeners() {
         algSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             algSlider.setValue(newVal.intValue());
             algDisplay.setViewport(new Rectangle2D(synthVM.algProp().get() * 128, 0.0, 128, 64.0));
+            algLabel.setText("Algorithm : " + synthVM.algProp().get());
+            Globals.setStringTextField();
             //synthVM.algProp().set(newVal.byteValue());
             //System.out.println(synthVM.algProp());
             //synth.setAlgorithm(newVal.byteValue());
@@ -124,18 +155,49 @@ public class SynthView {
 
         lenSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             lenSlider.setValue(newVal.intValue());
+            lenLabel.setText("Length : " + synthVM.waveLenProp().get());
+            Globals.setStringTextField();
         });
 
         heiSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             heiSlider.setValue(newVal.intValue());
+            heiLabel.setText("Height : " + synthVM.waveHeiProp().get());
+            Globals.setStringTextField();
         });
 
         gainSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            //synth.setGain(newVal.floatValue());
+            gainLabel.setText("Gain : " + synthVM.gainProp().get());
+            Globals.setStringTextField();
         });
 
         smoothSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            Globals.setStringTextField();
             //synth.setSmoothWin(newVal.intValue());
         });
+
+        macLenSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            macLenSlider.setValue(newVal.intValue());
+            //synthVM.macroLenProp().set(newVal.intValue());
+            macLenLabel.setText("Macro Length : " + synthVM.macroLenProp().get());
+            macSlider.setValue(clamp(0, macSlider.getValue(), newVal.intValue() - 1));
+            macSlider.setMax(newVal.intValue() - 1);
+            Globals.setStringTextField();
+        });
+
+        macSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            macSlider.setValue(newVal.intValue());
+            //Globals.macro = newVal.intValue();
+            //algDisplay.setViewport(new Rectangle2D(synthVM.algProp().get() * 128, 0.0, 128, 64.0));
+            macLabel.setText("Wave Sequence : " + synthVM.macroProp().get());
+            Globals.setStringTextField();
+        });
     }
+
+    private void copyToClipboard() {
+        StringSelection selection = new StringSelection(waveOutTextField.getText());
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, selection);
+    }
+
+
 }

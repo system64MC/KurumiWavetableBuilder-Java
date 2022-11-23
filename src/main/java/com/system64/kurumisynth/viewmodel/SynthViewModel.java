@@ -2,19 +2,16 @@ package com.system64.kurumisynth.viewmodel;
 
 import com.system64.kurumisynth.model.Globals;
 import com.system64.kurumisynth.model.Synth;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.*;
 
 public class SynthViewModel {
     private IntegerProperty algProp = new SimpleIntegerProperty();
     private IntegerProperty smoothWinProp = new SimpleIntegerProperty();
-    private IntegerProperty gainProp = new SimpleIntegerProperty();
     private IntegerProperty macroLenProp = new SimpleIntegerProperty();
     private IntegerProperty macroProp = new SimpleIntegerProperty();
     private ListProperty opList = new SimpleListProperty();
     private ListProperty waveOutProp = new SimpleListProperty();
+    private FloatProperty gainProp = new SimpleFloatProperty();
     private IntegerProperty waveLenProp = new SimpleIntegerProperty();
     private IntegerProperty waveHeiProp = new SimpleIntegerProperty();
 
@@ -23,8 +20,8 @@ public class SynthViewModel {
     public SynthViewModel() {
         synthModel = new Synth();
         Globals.synth = synthModel;
-        waveLenProp.set(Globals.waveLen);
-        waveHeiProp.set(Globals.waveHeight);
+        waveLenProp.set(synthModel.getWaveLen());
+        waveHeiProp.set(synthModel.getWaveHeight());
         System.out.println("Init Synth VM");
         setListeners();
         //algProp().addListener(e -> setAlgPropAction());
@@ -38,13 +35,31 @@ public class SynthViewModel {
         });
 
         waveLenProp.addListener((obs, oldVal, newVal) -> {
-            Globals.waveLen = newVal.intValue();
+            synthModel.setWaveLen(newVal.intValue());
             synthModel.synthesize();
             Globals.drawWaveOut();
         });
 
         waveHeiProp.addListener((obs, oldVal, newVal) -> {
-            Globals.waveHeight = newVal.intValue();
+            synthModel.setWaveHeight(newVal.intValue());
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+
+        gainProp.addListener((obs, oldVal, newVal) -> {
+            synthModel.setGain(newVal.floatValue());
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+
+        macroProp.addListener((obs, oldVal, newVal) -> {
+            synthModel.setMacro(newVal.intValue());
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+
+        macroLenProp.addListener((obs, oldVal, newVal) -> {
+            synthModel.setMacLen(newVal.intValue());
             synthModel.synthesize();
             Globals.drawWaveOut();
         });
@@ -77,21 +92,21 @@ public class SynthViewModel {
     public IntegerProperty waveHeiProp() {
         return this.waveHeiProp;
     }
-    public IntegerProperty gainProp() {
+    public FloatProperty gainProp() {
 
         //return gainProp;
-        return new SimpleIntegerProperty(1);
+        return this.gainProp;
     }
 
     public IntegerProperty macroLenProp() {
 
         //return macroLenProp;
-        return new SimpleIntegerProperty(5);
+        return this.macroLenProp;
     }
 
     public IntegerProperty macroProp() {
 
         //return macroProp;
-        return new SimpleIntegerProperty(9);
+        return this.macroProp;
     }
 }

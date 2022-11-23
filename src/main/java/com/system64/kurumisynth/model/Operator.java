@@ -3,8 +3,6 @@ package com.system64.kurumisynth.model;
 import java.util.ArrayList;
 
 import static com.sun.javafx.util.Utils.clamp;
-import static com.system64.kurumisynth.model.Globals.macLen;
-import static com.system64.kurumisynth.model.Globals.macro;
 //import static org.controlsfx.tools.Utils.clamp;
 
 public class Operator {
@@ -42,15 +40,16 @@ public class Operator {
 
     private float prev;
 
-    public int getFeedback() {
+    public float getFeedback() {
         return feedback;
     }
 
-    public void setFeedback(int feedback) {
+    public void setFeedback(float feedback) {
+        System.out.println("FEEDBACK");
         this.feedback = feedback;
     }
 
-    private int feedback;
+    private float feedback;
     private int phaseRev;
 
     public int getDetune() {
@@ -171,34 +170,49 @@ public class Operator {
 
     private float pGetPhase() {
         int myPhaseMod = phaseMod ? 1 : 0;
+        float macro = Globals.synth.getMacro();
+        float macLen = Globals.synth.getMacLen();
         if(customPhase)
-            return (customPhaseEnv.get((int)(clamp(0, macro, customPhaseEnv.size()-1)))/macLen-1) *
+            return ((float)customPhaseEnv.get((int)(clamp(0, macro, customPhaseEnv.size()-1)))/macLen-1) *
                     phaseRev * detune * myPhaseMod;
-        return (macro/macLen-1) * phaseRev * detune * myPhaseMod;
+        return ((float) macro/macLen-1) * phaseRev * detune * myPhaseMod;
     }
 
     public float getFB() {
         return feedback * (prev / 6 * mult);
+    }
+
+    private float getSin(float x) {
+        return (float) Math.sin((x * mult * 2.0 * Math.PI) + (phase * Math.PI * 2.0 + (pGetPhase() * Math.PI * 2.0)));
     }
     public float oscillate(float x) {
         //System.out.println("X = " + (float) Math.sin((x * mult * 2 * Math.PI) + (phase * Math.PI * 2 + (pGetPhase() * Math.PI * 2))));
         switch (this.waveformId)
         {
             case 0: // 0 - Sine
-                return (float) Math.sin((x * mult * 2 * Math.PI) + (phase * Math.PI * 2 + (pGetPhase() * Math.PI * 2)));
+                return getSin(x);
+            case 1: // Rectified Sine
+                float tmp = getSin(x);
+                return tmp > 0 ? tmp : 0;
+            case 2: // Absolute Sine
+                return Math.abs(getSin(x));
+            case 3: // Quarter Sine
+                return ((x * mult + phase + (pGetPhase())) % (1.0 / 2.0)) <= (1.0 / 4.0) ? Math.abs(getSin(x)) : 0;
+
         }
         return (float) Math.sin((x * mult * 2 * Math.PI) + (phase * Math.PI * 2 + (pGetPhase() * Math.PI * 2)));
     }
 
     private float customEnv(int mac) {
         int index = (int) clamp(0.0, (double) mac, (double) customVolEnv.size()-1);
-        return tl * (customVolEnv.get(index)/ 63);
+        return tl * (customVolEnv.get(index)/ 63.0f);
     }
 
     private float adsr(int mac) {
-        int atk = adsr.getAttack();
-        int dec = adsr.getDecay();
+        float atk = adsr.getAttack();
+        float dec = adsr.getDecay();
         float sus = adsr.getSustain();
+        float macLen = Globals.synth.getMacLen();
         // Attack
         if(mac <= atk)
         {
@@ -215,7 +229,7 @@ public class Operator {
         {
             if(dec <= 0)
                 return sus;
-            float tick = ((mac - atk) / dec);
+            float tick = ( (mac - atk) / dec);
             float decVal = (sus - tl) * tick + tl;
             return decVal < sus ? sus : decVal;
         }

@@ -3,21 +3,26 @@ package com.system64.kurumisynth.model;
 import com.system64.kurumisynth.viewmodel.OperatorViewModel;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Globals {
-    public static int waveLen = 32;
-    public static int waveHeight = 31;
-    public static int macLen = 64;
-    public static int macro = 0;
+
 
     public static Synth synth;
 
     public static ArrayList<Integer> waveOutput = new ArrayList<Integer>();
 
     public static ArrayList<OperatorViewModel> opVMs = new ArrayList<>();
+
+    public static TextField txtField;
+
+    public static void setStringTextField() {
+        txtField.setText(Globals.getWaveOutStr());
+    }
     //public static ObservableList<Integer> waveOutput2 =
 
     public static Canvas waveDrawCvs;
@@ -29,7 +34,7 @@ public class Globals {
         gc.clearRect(0, 0, waveDrawCvs.getWidth(), waveDrawCvs.getHeight());
         for(int i = 0; i < len; i++)
         {
-            int sample = -waveOutput.get(i) * 255 / waveHeight;
+            int sample = -waveOutput.get(i) * 255 / synth.getWaveHeight();
             if(sample >= -128)
             {
 
@@ -49,5 +54,14 @@ public class Globals {
         }
         System.out.println(waveOutput);
         //waveDrawCvs.getGraphicsContext2D().fillRect(10, 10, 20, 20);
+    }
+
+    public static String getWaveOutStr() {
+        StringBuilder str = new StringBuilder();
+        for (int i : waveOutput) {
+            str.append(i).append(" ");
+        }
+        str.append(";");
+        return str.toString();
     }
 }

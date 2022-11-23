@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Kurumi-Java:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Kurumi_Java_jar</output-path>
+    <root id="archive" name="Kurumi-Java.jar">
+      <element id="module-output" name="Kurumi-Java" />
+    </root>
+  </artifact>
+</component>
