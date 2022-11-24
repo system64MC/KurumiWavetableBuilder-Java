@@ -12,6 +12,7 @@ public class OperatorViewModel {
     private FloatProperty phaseProp = new SimpleFloatProperty();
     private ObjectProperty adsr = new SimpleObjectProperty();
     private IntegerProperty waveProp = new SimpleIntegerProperty();
+    private IntegerProperty interpolationProp = new SimpleIntegerProperty();
     private IntegerProperty multProp = new SimpleIntegerProperty();
     private FloatProperty feedbackProp = new SimpleFloatProperty();
     public OperatorViewModel() {
@@ -44,6 +45,7 @@ public class OperatorViewModel {
     public IntegerProperty multProp() {
         return this.multProp;
     }
+    public IntegerProperty interpolationProp() { return this.interpolationProp; }
 
     public FloatProperty feedbackProp() {
         return this.feedbackProp;
@@ -76,6 +78,12 @@ public class OperatorViewModel {
 
         multProp.addListener((obs, oldVal, newVal) -> {
             opModel.setMult(newVal.intValue());
+            Globals.synth.synthesize();
+            Globals.drawWaveOut();
+        });
+
+        interpolationProp.addListener((obs, oldVal, newVal) -> {
+            opModel.setInterpolation(newVal.intValue());
             Globals.synth.synthesize();
             Globals.drawWaveOut();
         });

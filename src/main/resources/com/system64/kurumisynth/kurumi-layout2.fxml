@@ -94,14 +94,14 @@
     </MenuBar>
       <HBox prefHeight="575.0" prefWidth="146.0">
          <children>
-            <VBox prefHeight="200.0" prefWidth="150.0" style="-fx-padding: 20;">
+            <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-padding: 30 30 30 30;">
                <children>
                    <ImageView fx:id="algDisplay" smooth="false"  pickOnBounds="true" scaleX="1" scaleY="1" preserveRatio="false">
 
                    </ImageView>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <AnchorPane prefHeight="200.0" prefWidth="250.0">
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
                                <Slider fx:id="algSlider"
                                        blockIncrement="1.0"
@@ -110,7 +110,7 @@
                                        max="11.0"
                                        min="0.0"
                                        minorTickCount="0"
-                                       showTickLabels="false"
+                                       showTickLabels="true"
                                        showTickMarks="true"
                                        snapToTicks="true"
                                        styleClass="mySliders"
@@ -126,26 +126,25 @@
                                        min="0"
                                        majorTickUnit="0.01"
                                        snapToTicks="true"
-                                       styleClass="mySliders"
                                />
                               <Label fx:id="gainLabel" layoutX="158.0" layoutY="-1.0" text="Gain : 1" style="-fx-text-fill: #ffff9e;"/>
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <Slider fx:id="smoothSlider" blockIncrement="1.0" min="1" max="128.0" styleClass="mySliders"/>
+                              <Slider fx:id="smoothSlider" blockIncrement="1.0" min="1" max="128.0" />
                               <Label fx:id="smoothLabel" layoutX="158.0" layoutY="-1.0" text="Avg. Filter window : 1" style="-fx-text-fill: #ffff9e;"/>
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <Slider fx:id="macLenSlider" blockIncrement="1.0" min="1" max="256.0" styleClass="mySliders"/>
+                              <Slider fx:id="macLenSlider" blockIncrement="1.0" min="1" max="256.0" />
                               <Label fx:id="macLenLabel" layoutX="158.0" layoutY="-1.0" text="Macro Length : 64" style="-fx-text-fill: #ffff9e;"/>
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <Slider fx:id="macSlider" blockIncrement="1.0" max="63.0" styleClass="mySliders"/>
+                              <Slider fx:id="macSlider" blockIncrement="1.0" max="63.0" />
                               <Label fx:id="macLabel" layoutX="158.0" layoutY="-1.0" text="Wave sequence : 0" style="-fx-text-fill: #ffff9e;"/>
                            </children>
                         </AnchorPane>
@@ -175,7 +174,6 @@
                                            max="256.0"
                                            majorTickUnit="1.0"
                                            snapToTicks="true"
-                                           styleClass="mySliders"
                                    />
                                    <Label fx:id="lenLabel" layoutY="-1.0" text="Length : 32" style="-fx-text-fill: #ffff9e;"/>
                                </HBox>
@@ -192,7 +190,6 @@
                                            min="1"
                                            majorTickUnit="1.0"
                                            snapToTicks="true"
-                                           styleClass="mySliders"
                                    />
                                    <Label fx:id="heiLabel" layoutY="-1.0" text="Height : 31" style="-fx-text-fill: #ffff9e;"/>
                                </HBox>
@@ -203,7 +200,7 @@
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
                          <ScrollPane fx:id="opList" prefHeight="330.0" prefWidth="631.0">
-                             <VBox spacing="20" fx:id="opBox" style="-fx-background-color: #1e2029;">
+                             <VBox spacing="20" fx:id="opBox">
 
                              </VBox>
                          </ScrollPane>

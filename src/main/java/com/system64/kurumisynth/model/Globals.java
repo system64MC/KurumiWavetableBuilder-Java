@@ -1,6 +1,8 @@
 package com.system64.kurumisynth.model;
 
 import com.system64.kurumisynth.viewmodel.OperatorViewModel;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextField;
@@ -8,6 +10,9 @@ import javafx.scene.paint.Color;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Observable;
 
 public class Globals {
 
@@ -27,6 +32,50 @@ public class Globals {
 
     public static Canvas waveDrawCvs;
 
+    public static String[] waves = {
+            "Sine",
+            "Rect. Sine",
+            "Abs. Sine",
+            "Quarter Sine",
+            "Squished Sine",
+            "Squished Abs. Sine",
+            "Square",
+            "Saw",
+            "Rect. Saw",
+            "Abs. Saw",
+            "Cubed Saw",
+            "Rect. Cubed Saw",
+            "Abs. Cubed Saw",
+            "Cubed Sine",
+            "Rect. Cubed Sine",
+            "Abs. Cubed Sine",
+            "Quarter Cubed Sine",
+            "Squished Cubed Sine",
+            "Squi. Abs. Cubed Sine",
+            "Triangle",
+            "Rect. Triange",
+            "Abs. Triangle",
+            "Quarter Triangle",
+            "Squished Triangle",
+            "Abs. Squished Triangle",
+            "Cubed Triangle",
+            "Rect. Cubed Triangle",
+            "Abs. Cubed Triangle",
+            "Quarter Cubed Triangle",
+            "Squi. Cubed Triangle",
+            "Squi. Abs. Cubed Triangle",
+            "Custom"
+    };
+
+    public static String[] interpolations = {
+            "None",
+            "Linear",
+            "Cosine",
+            "Cubic"
+    };
+
+    public static List<String> wavesList = Arrays.asList(waves);
+    public static List<String> interpolationsList = Arrays.asList(interpolations);
     public static void drawWaveOut() {
         int len = waveOutput.size();
         //System.out.println(waveOutput);

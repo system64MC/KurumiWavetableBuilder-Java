@@ -2,6 +2,7 @@ package com.system64.kurumisynth.model;
 
 import java.util.ArrayList;
 
+import static com.sun.javafx.util.Utils.clamp;
 import static com.system64.kurumisynth.model.Globals.*;
 
 public class Synth {
@@ -99,7 +100,7 @@ public class Synth {
         ArrayList<Float> myArrayList = new ArrayList<Float>();
         for (int x = 0; x < waveLen; x++)
         {
-            myArrayList.add(fm(x) * gain);
+            myArrayList.add(clamp(-1, fm(x) * gain, 1));
         }
         // Smoothing here
         ArrayList<Integer> outList = new ArrayList<Integer>();
@@ -143,13 +144,18 @@ public class Synth {
                 */
 
                 float s1 = op0.oscillate(x + op0.getFB()) * op0.getVolume(macro);
+                op0.setPrev(s1);
                 float s2 = op1.oscillate(x + s1 + op1.getFB()) * op1.getVolume(macro);
+                op1.setPrev(s2);
                 float s3 = op2.oscillate(x + s2 + op2.getFB()) * op2.getVolume(macro);
+                op2.setPrev(s3);
                 float s4 = op3.oscillate(x + s3 + op3.getFB()) * op3.getVolume(macro);
                 op3.setPrev(s4);
-                //float s4 = op3.oscillate(x) * 1;
-                //System.out.println("S4 = " + op3.getVolume(macro));
                 return s4;
+            }
+            case 1:
+            {
+
             }
         }
         float s1 = op0.oscillate(x + op0.getFB()) * op0.getVolume(macro);

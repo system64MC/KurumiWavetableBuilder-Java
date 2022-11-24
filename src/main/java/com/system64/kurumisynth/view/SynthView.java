@@ -94,15 +94,15 @@ public class SynthView {
 
 
         try {
-            loadOperatorsUI();
             loadImage();
+            loadOperatorsUI();
         }
         catch (Exception e)
         {
-            System.out.println("E");
+            System.out.println(e.getCause());
         }
 
-
+        Globals.setStringTextField();
         //var myOpView = new OperatorView();
         //var myView = new SynthView();
 

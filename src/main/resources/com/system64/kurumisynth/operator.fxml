@@ -7,6 +7,10 @@
 
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.ChoiceBox?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.system64.kurumisynth.view.OperatorView">
    <children>
       <AnchorPane layoutY="22.0" prefHeight="0.0" prefWidth="219.0">
@@ -18,8 +22,9 @@
                        min="0"
                        majorTickUnit="0.01"
                        snapToTicks="true"
+                       styleClass="mySliders"
                />
-               <Label fx:id="tlLabel" layoutY="-1.0" text="TL : 0"/>
+               <Label fx:id="tlLabel" layoutY="-1.0" text="TL : 0" style="-fx-text-fill: #ffff9e;"/>
             </HBox>
          </children>
       </AnchorPane>
@@ -31,23 +36,20 @@
                        max="1"
                        majorTickUnit="0.01"
                        snapToTicks="true"
+                       styleClass="mySliders"
                />
-               <Label fx:id="phaseLabel" layoutY="-1.0" text="Phase : 0" />
+               <Label fx:id="phaseLabel" layoutY="-1.0" text="Phase : 0" style="-fx-text-fill: #ffff9e;"/>
             </HBox>
          </children>
       </AnchorPane>
       <AnchorPane layoutY="90.0" prefHeight="24.0" prefWidth="205.0">
          <children>
-            <HBox>
-               <Slider fx:id="waveSlider"
-                       blockIncrement="1"
-                       min="0"
-                       max="31"
-                       majorTickUnit="1"
-                       snapToTicks="true"
-               />
-               <Label fx:id="waveLabel" layoutY="-1.0" text="Waveform : 0" />
-            </HBox>
+            <VBox>
+               <Label fx:id="waveLabel" layoutY="-1.0" text="Waveform :" style="-fx-text-fill: #ffff9e;"/>
+               <ComboBox fx:id="waveSelect"/>
+               <Label layoutY="-1.0" text="Interpolation :" style="-fx-text-fill: #ffff9e;"/>
+               <ComboBox fx:id="interpolationSelect"/>
+            </VBox>
          </children>
       </AnchorPane>
       <AnchorPane layoutY="90.0" prefHeight="24.0" prefWidth="205.0">
@@ -59,8 +61,9 @@
                        max="32"
                        majorTickUnit="1"
                        snapToTicks="true"
+                       styleClass="mySliders"
                />
-               <Label fx:id="multLabel" layoutY="-1.0" text="Mult : 1" />
+               <Label fx:id="multLabel" layoutY="-1.0" text="Mult : 1" style="-fx-text-fill: #ffff9e;"/>
             </HBox>
          </children>
       </AnchorPane>
@@ -73,8 +76,9 @@
                        max="4"
                        majorTickUnit="0.025"
                        snapToTicks="true"
+                       styleClass="mySliders"
                />
-               <Label fx:id="fbLabel" layoutY="-1.0" text="Feedback : 0" />
+               <Label fx:id="fbLabel" layoutY="-1.0" text="Feedback : 0" style="-fx-text-fill: #ffff9e;"/>
             </HBox>
          </children>
       </AnchorPane>
