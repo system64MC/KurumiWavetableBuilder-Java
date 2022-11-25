@@ -14,6 +14,8 @@ import java.util.Arrays;
 
 public class OperatorView {
     @FXML
+    private Label opIdLabel;
+    @FXML
     private ComboBox interpolationSelect;
     @FXML
     private ComboBox waveSelect;
@@ -54,6 +56,7 @@ public class OperatorView {
         interpolationSelect.setItems(FXCollections.observableList(Globals.interpolationsList));
         interpolationSelect.setValue("None");
         opVM = new OperatorViewModel();
+        opIdLabel.setText("Operator " + (Globals.opVMs.indexOf(opVM) + 1) + " :");
         //tlSlider.setValue(opVM.tlVolumeProp().getValue());
         tlLabel.setText("TL : " + opVM.tlVolumeProp().getValue());
         doBindings();

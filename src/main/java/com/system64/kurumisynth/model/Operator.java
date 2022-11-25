@@ -13,6 +13,16 @@ import static com.sun.javafx.util.Utils.clamp;
 public class Operator {
     private Adsr adsr;
 
+    public int getModMode() {
+        return modMode;
+    }
+
+    public void setModMode(int modMode) {
+        this.modMode = modMode;
+    }
+
+    private int modMode = 0;
+
     public int[] getWavetable() {
         return wavetable;
     }

@@ -76,6 +76,17 @@ public class Globals {
 
     public static List<String> wavesList = Arrays.asList(waves);
     public static List<String> interpolationsList = Arrays.asList(interpolations);
+
+    public static final boolean fullWave = true;
+
+    private static int noInterpolation(int x) {
+        double t = x;
+        int idx = (int) Math.floor(t);
+        int len = 512;
+        //double max = (double)Arrays.stream(wavetable).max().getAsInt() / 2;
+        int s0 = (waveOutput.get((x % len)));
+        return s0;
+    }
     public static void drawWaveOut() {
         int len = waveOutput.size();
         //System.out.println(waveOutput);
@@ -89,14 +100,20 @@ public class Globals {
 
                 Color c = Color.rgb(53, 112, 181);
                 gc.setFill(c);
-                gc.fillRect(i * 2, 128, 2, Math.abs(-sample-128));
+                if(fullWave)
+                    gc.fillRect(i * (512.0 / waveOutput.size()), 128, (512.0 / waveOutput.size()), Math.abs(-sample-128));
+                else
+                    gc.fillRect(i * 2, 128, 2, Math.abs(-sample-128));
             }
             else
             {
                 Color c = Color.rgb(70, 200, 255);
                 gc.setFill(c);
                 //sample = -sample;
-                gc.fillRect(i * 2, sample+256, 2, Math.abs(-sample-128));
+                if(fullWave)
+                    gc.fillRect(i * (512.0 / waveOutput.size()), sample+256, (512.0 / waveOutput.size()), Math.abs(-sample-128));
+                else
+                    gc.fillRect(i * 2, sample+256, 2, Math.abs(-sample-128));
             }
             //fillRect(i * 4, 20, 3, waveOutput.get(i))
 

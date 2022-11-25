@@ -6,6 +6,10 @@ import javafx.beans.property.*;
 
 
 public class OperatorViewModel {
+    public Operator getOpModel() {
+        return opModel;
+    }
+
     private Operator opModel;
 
     private FloatProperty tlVolumeProp = new SimpleFloatProperty();

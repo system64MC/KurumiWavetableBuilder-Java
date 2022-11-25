@@ -11,7 +11,17 @@
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.ChoiceBox?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.system64.kurumisynth.view.OperatorView">
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.geometry.Insets?>
+<VBox maxHeight="-Infinity" style="-fx-border-style: solid; -fx-padding: 10; -fx-border-color:blue; -fx-border-width: 5;" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.system64.kurumisynth.view.OperatorView">
+   <VBox.margin>
+      <Insets bottom="10" left="10" right="10" top="10"/>
+   </VBox.margin>
+   <Label text="Operator : " style="-fx-text-fill: #ffff9e;" fx:id="opIdLabel"/>
+   <HBox>
+   <VBox>
    <children>
       <AnchorPane layoutY="22.0" prefHeight="0.0" prefWidth="219.0">
          <children>
@@ -83,4 +93,12 @@
          </children>
       </AnchorPane>
    </children>
+   </VBox>
+      <VBox prefWidth="256">
+         <Label text="Waveform : " style="-fx-text-fill: #ffff9e;"/>
+         <Pane minHeight="256" maxWidth="512" style="-fx-background-color: #1F20F9;" >
+            <Canvas fx:id="wavCanvas"/>
+         </Pane>
+      </VBox>
+   </HBox>
 </VBox>
