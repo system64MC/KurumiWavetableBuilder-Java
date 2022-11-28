@@ -15,7 +15,6 @@ public class Synth {
 
     public void setAlgorithm(byte algorithm) {
         this.algorithm = algorithm;
-        System.out.println(this.algorithm);
     }
 
     public void insertOp(Operator op) {
@@ -74,7 +73,7 @@ public class Synth {
         this.smoothWin = smoothWin;
     }
 
-    private byte smoothWin = 1;
+    private byte smoothWin = 0;
 
     public float getGain() {
         return gain;
@@ -102,11 +101,10 @@ public class Synth {
         {
             myArrayList.add(clamp(-1, fm(x) * gain, 1));
         }
-        // Smoothing here
+        myArrayList = smooth(myArrayList);
         ArrayList<Integer> outList = new ArrayList<Integer>();
         for(int c = 0; c < waveLen; c++)
         {
-            System.out.println(myArrayList.get(c));
             int tmp = Math.round((myArrayList.get(c) + 1) * ((float) waveHeight / 2));
             //System.out.println(tmp);
             outList.add(tmp);
@@ -115,10 +113,69 @@ public class Synth {
         //System.out.println(myArrayList);
         //System.out.println(operators[3]);
     }
-
-    private void smooth(ArrayList<Float> arrayToSmooth)
+    private int modulo(int a, int b) {
+        return ((a % b) + b) % b;
+    }
+    private ArrayList<Float> smooth(ArrayList<Float> arrayToSmooth)
     {
+        ArrayList<Float> out = new ArrayList<>();
+        for (int i = 0; i < arrayToSmooth.size(); i++)
+        {
+            float smp = 0;
+            for(int j = -smoothWin; j <= smoothWin; j++)
+            {
+                smp += arrayToSmooth.get(modulo(i+j, arrayToSmooth.size()));
+            }
+            float avg = smp/((smoothWin*2) + 1.0f);
+            out.add(avg);
+        }
+        return out;
+    }
 
+    private float logicMod2(float x, float modValue, Operator op)
+    {
+        switch (op.getModMode())
+        {
+            case 0: // FM
+                return op.oscillate(x + modValue + op.getFB()) * op.getVolume(macro);
+            case 1: // OR
+            {
+                int a = (int) Math.round((modValue + 1) * 32767.5f);
+                int b = (int) Math.round(((op.oscillate(x) * op.getVolume(macro)) + (1 * op.getVolume(macro))) * 32767.5f);
+                return ((float) (a | b) / 32767.5f)-(1 * op.getVolume(macro));
+            }
+            case 2: // XOR
+            {
+                int a = (int) Math.round((modValue + 1) * 32767.5f);
+                int b = (int) Math.round(((op.oscillate(x) * op.getVolume(macro)) + (1 * op.getVolume(macro))) * 32767.5f);
+                return ((float) (a ^ b) / 32767.5f)-(1 * op.getVolume(macro));
+            }
+            case 3: // AND
+            {
+                int a = (int) Math.round((modValue + 1) * 32767.5f);
+                int b = (int) Math.round(((op.oscillate(x) * op.getVolume(macro)) + (1 * op.getVolume(macro))) * 32767.5f);
+                return ((float) (a & b) / 32767.5f)-(1 * op.getVolume(macro));
+            }
+            case 4: // NAND
+            {
+                int a = (int) Math.round((modValue + 1) * 32767.5f);
+                int b = (int) Math.round(((op.oscillate(x) * op.getVolume(macro)) + (1 * op.getVolume(macro))) * 32767.5f);
+                return ((float) ~(a & b) / 32767.5f)-(1 * op.getVolume(macro));
+            }
+            case 5: // ADD
+            {
+                return (modValue + (op.oscillate(x) * op.getVolume(macro)));
+            }
+            case 6: // SUB
+            {
+                return (op.oscillate(x)* op.getVolume(macro) - modValue);
+            }
+            case 7: // MUL
+            {
+                return (modValue * (op.oscillate(x) * op.getVolume(macro)));
+            }
+        }
+        return op.oscillate(x + modValue + op.getFB()) * op.getVolume(macro);
     }
 
     private float logicMod(float x, float modValue, Operator op)
@@ -127,6 +184,42 @@ public class Synth {
         {
             case 0: // FM
                 return op.oscillate(x + modValue + op.getFB()) * op.getVolume(macro);
+            case 1: // OR
+            {
+                int a = (int) Math.round((modValue + 1) * 32767.5f);
+                int b = (int) Math.round(((op.oscillate(x + op.getFB()) * op.getVolume(macro)) + (1 * op.getVolume(macro))) * 32767.5f);
+                return ((float) (a | b) / 32767.5f)-(1 * op.getVolume(macro));
+            }
+            case 2: // XOR
+            {
+                int a = (int) Math.round((modValue) * 32767.5f);
+                int b = (int) Math.round(((op.oscillate(x + op.getFB()) * op.getVolume(macro))) * 32767.5f);
+                return ((float) (a ^ b) / 32767.5f);
+            }
+            case 3: // AND
+            {
+                int a = (int) Math.round((modValue) * 32767.5f);
+                int b = (int) Math.round(((op.oscillate(x + op.getFB()) * op.getVolume(macro))) * 32767.5f);
+                return ((float) (a & b) / 32767.5f);
+            }
+            case 4: // NAND
+            {
+                int a = (int) Math.round((modValue) * 32767.5f);
+                int b = (int) Math.round(((op.oscillate(x + op.getFB()) * op.getVolume(macro))) * 32767.5f);
+                return ((float) ~(a & b) / 32767.5f);
+            }
+            case 5: // ADD
+            {
+                return (modValue + (op.oscillate(x + op.getFB()) * op.getVolume(macro)));
+            }
+            case 6: // SUB
+            {
+                return (op.oscillate(x + op.getFB())* op.getVolume(macro) - modValue);
+            }
+            case 7: // MUL
+            {
+                return (modValue * (op.oscillate(x + op.getFB()) * op.getVolume(macro)));
+            }
         }
         return op.oscillate(x + modValue + op.getFB()) * op.getVolume(macro);
     }
@@ -140,7 +233,6 @@ public class Synth {
         Operator op4 = operators.get(3);
 
         x = x / waveLen;
-        System.out.println(x);
         //System.out.println(operators.size());
 
         switch (algorithm)
@@ -201,6 +293,8 @@ public class Synth {
                 float sum13 = s1 + s3;
                 float s4 = logicMod(x, sum13, op4);
                 op4.setPrev(s4);
+
+                return s4;
             }
             case 3:
             {

@@ -15,7 +15,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.geometry.Insets?>
-<VBox maxHeight="-Infinity" style="-fx-border-style: solid; -fx-padding: 10; -fx-border-color:blue; -fx-border-width: 5;" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.system64.kurumisynth.view.OperatorView">
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.CheckBox?>
+<VBox style="-fx-border-style: solid; -fx-padding: 10; -fx-border-color:blue; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.system64.kurumisynth.view.OperatorView">
    <VBox.margin>
       <Insets bottom="10" left="10" right="10" top="10"/>
    </VBox.margin>
@@ -23,7 +25,7 @@
    <HBox>
    <VBox>
    <children>
-      <AnchorPane layoutY="22.0" prefHeight="0.0" prefWidth="219.0">
+      <AnchorPane>
          <children>
             <HBox>
                <Slider fx:id="tlSlider"
@@ -49,17 +51,37 @@
                        styleClass="mySliders"
                />
                <Label fx:id="phaseLabel" layoutY="-1.0" text="Phase : 0" style="-fx-text-fill: #ffff9e;"/>
+
+            </HBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane>
+         <CheckBox fx:id="phaseCheck" text="Phase Modulation" style="-fx-text-fill: #ffff9e;"/>
+      </AnchorPane>
+      <AnchorPane>
+         <CheckBox fx:id="revPhaseCheck" text="Reverse Phase" style="-fx-text-fill: #ffff9e;"/>
+      </AnchorPane>
+      <AnchorPane layoutY="90.0" prefHeight="24.0" prefWidth="205.0">
+         <children>
+            <HBox>
+               <Slider fx:id="detuneSlider"
+                       blockIncrement="1"
+                       min="1"
+                       max="32"
+                       majorTickUnit="1"
+                       snapToTicks="true"
+                       styleClass="mySliders"
+               />
+               <Label fx:id="detuneLabel" layoutY="-1.0" text="Detune : 1" style="-fx-text-fill: #ffff9e;"/>
             </HBox>
          </children>
       </AnchorPane>
       <AnchorPane layoutY="90.0" prefHeight="24.0" prefWidth="205.0">
          <children>
-            <VBox>
-               <Label fx:id="waveLabel" layoutY="-1.0" text="Waveform :" style="-fx-text-fill: #ffff9e;"/>
-               <ComboBox fx:id="waveSelect"/>
-               <Label layoutY="-1.0" text="Interpolation :" style="-fx-text-fill: #ffff9e;"/>
-               <ComboBox fx:id="interpolationSelect"/>
-            </VBox>
+            <HBox>
+               <Label text="Mod. Mode : " style="-fx-text-fill: #ffff9e;"/>
+               <ComboBox fx:id="modSelect"/>
+            </HBox>
          </children>
       </AnchorPane>
       <AnchorPane layoutY="90.0" prefHeight="24.0" prefWidth="205.0">
@@ -90,14 +112,67 @@
                />
                <Label fx:id="fbLabel" layoutY="-1.0" text="Feedback : 0" style="-fx-text-fill: #ffff9e;"/>
             </HBox>
+
+
+
+
+
+
          </children>
+      </AnchorPane>
+      <AnchorPane layoutY="90.0" prefHeight="24.0" prefWidth="205.0">
+         <HBox>
+            <Slider fx:id="attackSlider"
+                    blockIncrement="1"
+                    min="0"
+                    max="256"
+                    majorTickUnit="1"
+                    snapToTicks="true"
+                    styleClass="mySliders"
+            />
+            <Label fx:id="attackLabel" layoutY="-1.0" text="Attack : 0" style="-fx-text-fill: #ffff9e;"/>
+         </HBox>
+      </AnchorPane>
+      <AnchorPane layoutY="90.0" prefHeight="24.0" prefWidth="205.0">
+         <HBox>
+            <Slider fx:id="decaySlider"
+                    blockIncrement="1"
+                    min="0"
+                    max="256"
+                    majorTickUnit="1"
+                    snapToTicks="true"
+                    styleClass="mySliders"
+            />
+            <Label fx:id="decayLabel" layoutY="-1.0" text="Decay : 0" style="-fx-text-fill: #ffff9e;"/>
+         </HBox>
+      </AnchorPane>
+      <AnchorPane layoutY="90.0" prefHeight="24.0" prefWidth="205.0">
+         <HBox>
+            <Slider fx:id="sustainSlider"
+                    blockIncrement="0.025"
+                    min="0"
+                    max="4"
+                    majorTickUnit="0.025"
+                    snapToTicks="true"
+                    styleClass="mySliders"
+            />
+            <Label fx:id="sustainLabel" layoutY="-1.0" text="Sustain : 0" style="-fx-text-fill: #ffff9e;"/>
+         </HBox>
       </AnchorPane>
    </children>
    </VBox>
-      <VBox prefWidth="256">
+      <VBox  style="-fx-padding: 10;">
          <Label text="Waveform : " style="-fx-text-fill: #ffff9e;"/>
-         <Pane minHeight="256" maxWidth="512" style="-fx-background-color: #1F20F9;" >
-            <Canvas fx:id="wavCanvas"/>
+         <ComboBox fx:id="waveSelect"/>
+         <Label layoutY="-1.0" text="Interpolation :" style="-fx-text-fill: #ffff9e;"/>
+         <ComboBox fx:id="interpolationSelect"/>
+         <Pane maxHeight="64" minWidth="256" maxWidth="256" style="-fx-background-color: #1F20F9; " >
+            <Canvas fx:id="waveCanvas" width="256" height="64" />
+         </Pane>
+         <TextField fx:id="waveField" disable="true"/>
+         <Label text="ADSR : " style="-fx-text-fill: #ffff9e;"/>
+         <Pane maxHeight="64" minHeight="64" minWidth="256" maxWidth="256" style="-fx-background-color: #246c00; " >
+            <Canvas fx:id="adsrCanvas" width="256" height="64" />
          </Pane>
       </VBox>
    </HBox>

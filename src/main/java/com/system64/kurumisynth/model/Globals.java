@@ -7,6 +7,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -74,10 +75,25 @@ public class Globals {
             "Cubic"
     };
 
+    public static String[] modModes = {
+            "FM",
+            "OR",
+            "XOR",
+            "AND",
+            "NAND",
+            "ADD",
+            "SUB",
+            "MUL"
+    };
+
     public static List<String> wavesList = Arrays.asList(waves);
     public static List<String> interpolationsList = Arrays.asList(interpolations);
 
+    public static List<String> modList = Arrays.asList(modModes);
+
     public static final boolean fullWave = true;
+
+    public static Stage stage;
 
     private static int noInterpolation(int x) {
         double t = x;

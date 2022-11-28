@@ -4,29 +4,39 @@ import com.sun.jndi.toolkit.url.Uri;
 import com.system64.kurumisynth.Main;
 import com.system64.kurumisynth.model.Globals;
 import com.system64.kurumisynth.viewmodel.SynthViewModel;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import sun.misc.BASE64Decoder;
 
 import java.awt.*;
+import java.awt.TextArea;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
 import static com.sun.javafx.util.Utils.clamp;
 
 public class SynthView {
+    @FXML
+    private javafx.scene.control.TextArea macOutTA;
+    @FXML
+    private TextArea macroOutTextField;
+    @FXML
+    private Label smoothLabel;
     @FXML
     private Label lenLabel;
     @FXML
@@ -73,13 +83,22 @@ public class SynthView {
     @FXML
     private Label algLabel;
 
+    FileChooser exportWav = new FileChooser();
+
     @FXML
     void initialize() {
         synthVM = new SynthViewModel();
+        exportWav.setTitle("Export wavetable as WAV");
+        exportWav.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("WAV Files", "*.wav"));
         Globals.txtField = this.waveOutTextField;
         Globals.setStringTextField();
         waveOutTextField.setOnMouseClicked(e -> {
-            copyToClipboard();
+            copyToClipboard(waveOutTextField);
+        });
+
+        macOutTA.setOnMouseClicked(e -> {
+            System.out.println("COPY");
+            copyToClipboard(macOutTA);
         });
         Globals.waveDrawCvs = waveDrawCvs;
 
@@ -123,7 +142,6 @@ public class SynthView {
 
     void loadOperatorsUI() throws IOException {
         URL res = Main.class.getResource("operator.fxml");
-        System.out.println("Op lenght = " + Globals.opVMs.size());
         for(int i = 0; i < 4; i++)
         {
             FXMLLoader fxmlLoader = new FXMLLoader(res);
@@ -171,6 +189,8 @@ public class SynthView {
         });
 
         smoothSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            smoothSlider.setValue(newVal.intValue());
+            smoothLabel.setText("Avg. Filter window : " + synthVM.smoothWinProp().get());
             Globals.setStringTextField();
             //synth.setSmoothWin(newVal.intValue());
         });
@@ -193,11 +213,82 @@ public class SynthView {
         });
     }
 
-    private void copyToClipboard() {
-        StringSelection selection = new StringSelection(waveOutTextField.getText());
+    private void copyToClipboard(Object tf) {
+        StringSelection selection;
+        if(tf instanceof TextField)
+        {
+            TextField myTF = (TextField)tf;
+            selection = new StringSelection(myTF.getText());
+        }
+        else
+        {
+            if(tf instanceof javafx.scene.control.TextArea)
+            {
+                System.out.println("TEXTAREA");
+                javafx.scene.control.TextArea myTA = (javafx.scene.control.TextArea) tf;
+                selection = new StringSelection(myTA.getText());
+            }
+            else
+                return;
+        }
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, selection);
+    }
+
+    private void copyToClip2(javafx.scene.control.TextArea ta)
+    {
+        StringSelection selection;
+        selection = new StringSelection(ta.getText());
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(selection, selection);
     }
 
 
+    public void genMacro(ActionEvent actionEvent) {
+        String out = synthVM.genMacro();
+        System.out.println(out);
+        macOutTA.setText(out);
+    }
+
+    public void exportWav(ActionEvent actionEvent) throws IOException {
+        File file = exportWav.showSaveDialog(Globals.stage);
+        javafx.scene.control.Dialog<String> dialog = new javafx.scene.control.Dialog<>();
+        ButtonType but = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().add(but);
+        boolean ok = false;
+        ok = synthVM.writeWav(file, false);
+        if(file != null) {
+            if(ok)
+            {
+                dialog.setTitle("File exported!");
+                dialog.setContentText("File exported with success!");
+            }
+            else {
+                dialog.setTitle("ERROR!");
+                dialog.setContentText("An error occurred during export!");
+            }
+            dialog.showAndWait();
+        }
+    }
+
+    public void exportSeqAsWav(ActionEvent actionEvent) throws IOException {
+        File file = exportWav.showSaveDialog(Globals.stage);
+        javafx.scene.control.Dialog<String> dialog = new javafx.scene.control.Dialog<>();
+        ButtonType but = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().add(but);
+        boolean ok = false;
+        ok = synthVM.writeWav(file, true);
+        if(file != null) {
+            if(ok)
+            {
+                dialog.setTitle("File exported!");
+                dialog.setContentText("File exported with success!");
+            }
+            else {
+                dialog.setTitle("ERROR!");
+                dialog.setContentText("An error occurred during export!");
+            }
+            dialog.showAndWait();
+        }
+    }
 }

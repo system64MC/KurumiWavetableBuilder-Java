@@ -50,16 +50,20 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #14161F;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.system64.kurumisynth.view.SynthView">
-   <VBox>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<VBox style="-fx-background-color: #14161F;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.system64.kurumisynth.view.SynthView">
     <children>
-    <MenuBar maxWidth="1.7976931348623157E308">
+    <MenuBar>
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
             <MenuItem mnemonicParsing="false" text="New" />
             <MenuItem mnemonicParsing="false" text="Open…" />
-            <Menu mnemonicParsing="false" text="Open Recent" />
+              <Menu mnemonicParsing="false" text="Export" >
+                  <MenuItem onAction="#exportWav" text=".WAV"/>
+                  <MenuItem onAction="#exportSeqAsWav" text="Sequence as .WAV"/>
+              </Menu>
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Close" />
             <MenuItem mnemonicParsing="false" text="Save" />
@@ -92,63 +96,70 @@
         </Menu>
       </menus>
     </MenuBar>
-      <HBox prefHeight="575.0" prefWidth="146.0">
+      <HBox>
          <children>
-            <VBox prefHeight="200.0" prefWidth="150.0" style="-fx-padding: 20;">
+            <VBox style="-fx-padding: 20;" >
                <children>
                    <ImageView fx:id="algDisplay" pickOnBounds="true" preserveRatio="false" scaleX="1" scaleY="1" smooth="false">
 
                    </ImageView>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox >
                      <children>
-                        <AnchorPane prefHeight="200.0" prefWidth="250.0">
+                        <AnchorPane prefHeight="30.0" >
                            <children>
                                <Slider fx:id="algSlider" blockIncrement="1.0" cache="true" majorTickUnit="1.0" max="11.0" min="0.0" minorTickCount="0" showTickLabels="false" showTickMarks="true" snapToTicks="true" styleClass="mySliders" />
                                <Label fx:id="algLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Algorithm : 0" />
                            </children>
                         </AnchorPane>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane prefHeight="30.0" >
                            <children>
                                <Slider fx:id="gainSlider" blockIncrement="0.01" majorTickUnit="0.01" max="4.0" min="0" snapToTicks="true" styleClass="mySliders" />
                               <Label fx:id="gainLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Gain : 1" />
                            </children>
                         </AnchorPane>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane prefHeight="30.0" >
                            <children>
-                              <Slider fx:id="smoothSlider" blockIncrement="1.0" max="128.0" min="1" styleClass="mySliders" />
-                              <Label fx:id="smoothLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Avg. Filter window : 1" />
+                              <Slider fx:id="smoothSlider" blockIncrement="1.0" max="128.0" min="0" styleClass="mySliders" />
+                              <Label fx:id="smoothLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Avg. Filter window : 0" />
                            </children>
                         </AnchorPane>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane prefHeight="30.0" >
                            <children>
                               <Slider fx:id="macLenSlider" blockIncrement="1.0" max="256.0" min="1" styleClass="mySliders" />
                               <Label fx:id="macLenLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Macro Length : 64" />
                            </children>
                         </AnchorPane>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane prefHeight="30.0" >
                            <children>
                               <Slider fx:id="macSlider" blockIncrement="1.0" max="63.0" styleClass="mySliders" />
                               <Label fx:id="macLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Wave sequence : 0" />
                            </children>
                         </AnchorPane>
-                         <TextField fx:id="waveOutTextField" editable="false">
+                         <AnchorPane prefHeight="30.0" >
+                         <TextField fx:id="waveOutTextField" prefWidth="200" editable="false">
 
                          </TextField>
+
+                         </AnchorPane>
+                         <VBox prefHeight="90">
+                             <TextArea fx:id="macOutTA" prefWidth="200" editable="false" prefHeight="128">
+
+                             </TextArea>
+                             <Button text="generate sequence" onAction="#genMacro"/>
+                         </VBox>
+
+
                      </children>
                   </VBox>
                </children>
             </VBox>
-            <StackPane style="-fx-padding: 30;">
-            <VBox prefHeight="575.0" prefWidth="653.0">
+            <VBox style="-fx-padding: 30;"  minWidth="128" fillWidth="true">
    
                 <children>
-                    <Pane maxWidth="512" minHeight="256" style="-fx-background-color: #1e2029;">
+                    <Pane maxWidth="512" maxHeight="256" minHeight="256" minWidth="512" style="-fx-background-color: #1e2029;">
                         <Canvas fx:id="waveDrawCvs" height="256" width="512" />
                     </Pane>
-   
-                  <VBox prefHeight="46.0" prefWidth="631.0">
-                     <children>
-                        <AnchorPane prefHeight="23.0" prefWidth="631.0">
+                        <AnchorPane prefHeight="23.0" >
                            <children>
                                <HBox>
                                    <Slider fx:id="lenSlider" blockIncrement="1.0" majorTickUnit="1.0" max="256.0" minWidth="512" snapToTicks="true" styleClass="mySliders" />
@@ -157,38 +168,19 @@
    
                            </children>
                         </AnchorPane>
-                        <AnchorPane prefHeight="20.0" prefWidth="631.0">
-                           <children>
                                <HBox>
                                    <Slider fx:id="heiSlider" blockIncrement="1.0" majorTickUnit="1.0" max="255.0" min="1" minWidth="512" snapToTicks="true" styleClass="mySliders" />
                                    <Label fx:id="heiLabel" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Height : 31" />
                                </HBox>
-                           </children>
-                        </AnchorPane>
-                     </children>
-                  </VBox>
-                  <AnchorPane>
-                     <children>
-                         <ScrollPane fx:id="opList" prefHeight="300" AnchorPane.leftAnchor="0.0">
-                             <VBox fx:id="opBox" spacing="20" style="-fx-background-color: #1e2029;">
-
-                             </VBox>
-                         </ScrollPane>
-                     </children>
-                  </AnchorPane>
    
                </children>
-   
+                <ScrollPane fitToWidth="true" fx:id="opList">
+                    <VBox fillWidth="true" fx:id="opBox" style="-fx-background-color: #1e2029;">
+
+                    </VBox>
+                </ScrollPane>
             </VBox>
-            </StackPane>
          </children>
       </HBox>
    </children>
-      <cursor>
-         <Cursor fx:constant="DEFAULT" />
-      </cursor>
    </VBox>
-   <rotationAxis>
-      <Point3D />
-   </rotationAxis>
-</AnchorPane>

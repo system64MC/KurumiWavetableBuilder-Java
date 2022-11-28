@@ -34,11 +34,10 @@ public class Adsr {
         this.decay = decay;
         this.sustain = sustain;
     }
-
     public Adsr() {
         this.attack = 0;
         this.decay = 0;
-        this.sustain = 1;
+        this.sustain = 0;
     }
 
     @Override

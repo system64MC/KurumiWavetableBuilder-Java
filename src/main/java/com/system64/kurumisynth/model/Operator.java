@@ -65,7 +65,7 @@ public class Operator {
     }
 
     private float feedback;
-    private int phaseRev;
+    private int phaseRev = 1;
 
     public int getDetune() {
         return detune;
@@ -76,7 +76,9 @@ public class Operator {
     }
 
     public void setPhaseMod(boolean phaseMod) {
+        //System.out.println("CHECK");
         this.phaseMod = phaseMod;
+        System.out.println(this.phaseMod);
     }
 
     private boolean phaseMod;
@@ -85,7 +87,7 @@ public class Operator {
         this.detune = detune;
     }
 
-    private  int detune;
+    private  int detune = 1;
 
     public void setPhaseRev(boolean isRev) {
         this.phaseRev = isRev ? -1 : 1;
@@ -170,7 +172,7 @@ public class Operator {
         this.mult = 1;
         this.phase = 0;
         this.customPhase = false;
-        this.detune = 0;
+        this.detune = 1;
         this.phaseMod = false;
         this.feedback = 0;
         this.prev = 0;
@@ -187,7 +189,7 @@ public class Operator {
         this.mult = mult;
         this.phase = phase;
         this.customPhase = false;
-        this.detune = 0;
+        this.detune = 1;
         this.phaseMod = false;
         this.feedback = 0;
         this.prev = 0;
@@ -198,13 +200,13 @@ public class Operator {
     }
 
     private float pGetPhase() {
-        int myPhaseMod = phaseMod ? 1 : 0;
+        float myPhaseMod = phaseMod ? 1.0f : 0.0f;
         float macro = Globals.synth.getMacro();
         float macLen = Globals.synth.getMacLen();
         if(customPhase)
-            return ((float)customPhaseEnv.get((int)(clamp(0, macro, customPhaseEnv.size()-1)))/macLen-1) *
+            return (customPhaseEnv.get((int)(clamp(0, macro, customPhaseEnv.size()-1)))/macLen-1) *
                     phaseRev * detune * myPhaseMod;
-        return ((float) macro/macLen-1) * phaseRev * detune * myPhaseMod;
+        return (float) ( macro/(macLen-1)) * phaseRev * detune * myPhaseMod;
     }
 
     public float getFB() {
