@@ -52,6 +52,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.CheckBox?>
 <VBox style="-fx-background-color: #14161F;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.system64.kurumisynth.view.SynthView">
     <children>
     <MenuBar>
@@ -59,18 +60,15 @@
         <Menu mnemonicParsing="false" text="File">
           <items>
             <MenuItem mnemonicParsing="false" text="New" />
-            <MenuItem mnemonicParsing="false" text="Open…" />
+            <MenuItem onAction="#loadFile" mnemonicParsing="false" text="Open…" />
               <Menu mnemonicParsing="false" text="Export" >
                   <MenuItem onAction="#exportWav" text=".WAV"/>
                   <MenuItem onAction="#exportSeqAsWav" text="Sequence as .WAV"/>
               </Menu>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Close" />
-            <MenuItem mnemonicParsing="false" text="Save" />
-            <MenuItem mnemonicParsing="false" text="Save As…" />
-            <MenuItem mnemonicParsing="false" text="Revert" />
+            <MenuItem onAction="#saveFile" mnemonicParsing="false" text="Save" />
+            <MenuItem mnemonicParsing="false" text="Reset to default values" onAction="#resetDefault" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Preferences…" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Quit" />
           </items>
@@ -147,6 +145,7 @@
                              </TextArea>
                              <Button text="generate sequence" onAction="#genMacro"/>
                          </VBox>
+                         <CheckBox fx:id="soundCheck" selected="false" text="Play sound" style="-fx-text-fill: #ffff9e;"/>
 
 
                      </children>
@@ -162,7 +161,7 @@
                         <AnchorPane prefHeight="23.0" >
                            <children>
                                <HBox>
-                                   <Slider fx:id="lenSlider" blockIncrement="1.0" majorTickUnit="1.0" max="256.0" minWidth="512" snapToTicks="true" styleClass="mySliders" />
+                                   <Slider fx:id="lenSlider" blockIncrement="1.0" majorTickUnit="1.0" min="1" max="256.0" minWidth="512" snapToTicks="true" styleClass="mySliders" />
                                    <Label fx:id="lenLabel" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Length : 32" />
                                </HBox>
    

@@ -61,6 +61,12 @@
       <AnchorPane>
          <CheckBox fx:id="revPhaseCheck" text="Reverse Phase" style="-fx-text-fill: #ffff9e;"/>
       </AnchorPane>
+      <AnchorPane>
+         <CheckBox fx:id="customVolEnvCheck" selected="true" text="ADSR Envelope (Uncheck to use custom)" style="-fx-text-fill: #ffff9e;"/>
+      </AnchorPane>
+      <AnchorPane>
+         <CheckBox fx:id="custPhaseCheck" selected="true" text="Standard Phasing (Uncheck to use custom)" style="-fx-text-fill: #ffff9e;"/>
+      </AnchorPane>
       <AnchorPane layoutY="90.0" prefHeight="24.0" prefWidth="205.0">
          <children>
             <HBox>
@@ -112,53 +118,49 @@
                />
                <Label fx:id="fbLabel" layoutY="-1.0" text="Feedback : 0" style="-fx-text-fill: #ffff9e;"/>
             </HBox>
-
-
-
-
-
-
          </children>
       </AnchorPane>
-      <AnchorPane layoutY="90.0" prefHeight="24.0" prefWidth="205.0">
-         <HBox>
-            <Slider fx:id="attackSlider"
-                    blockIncrement="1"
-                    min="0"
-                    max="256"
-                    majorTickUnit="1"
-                    snapToTicks="true"
-                    styleClass="mySliders"
-            />
-            <Label fx:id="attackLabel" layoutY="-1.0" text="Attack : 0" style="-fx-text-fill: #ffff9e;"/>
-         </HBox>
-      </AnchorPane>
-      <AnchorPane layoutY="90.0" prefHeight="24.0" prefWidth="205.0">
-         <HBox>
-            <Slider fx:id="decaySlider"
-                    blockIncrement="1"
-                    min="0"
-                    max="256"
-                    majorTickUnit="1"
-                    snapToTicks="true"
-                    styleClass="mySliders"
-            />
-            <Label fx:id="decayLabel" layoutY="-1.0" text="Decay : 0" style="-fx-text-fill: #ffff9e;"/>
-         </HBox>
-      </AnchorPane>
-      <AnchorPane layoutY="90.0" prefHeight="24.0" prefWidth="205.0">
-         <HBox>
-            <Slider fx:id="sustainSlider"
-                    blockIncrement="0.025"
-                    min="0"
-                    max="4"
-                    majorTickUnit="0.025"
-                    snapToTicks="true"
-                    styleClass="mySliders"
-            />
-            <Label fx:id="sustainLabel" layoutY="-1.0" text="Sustain : 0" style="-fx-text-fill: #ffff9e;"/>
-         </HBox>
-      </AnchorPane>
+      <VBox fx:id="envBox" visible="true">
+         <AnchorPane layoutY="90.0" prefHeight="24.0" prefWidth="205.0">
+            <HBox>
+               <Slider fx:id="attackSlider"
+                       blockIncrement="1"
+                       min="0"
+                       max="256"
+                       majorTickUnit="1"
+                       snapToTicks="true"
+                       styleClass="mySliders"
+               />
+               <Label fx:id="attackLabel" layoutY="-1.0" text="Attack : 0" style="-fx-text-fill: #ffff9e;"/>
+            </HBox>
+         </AnchorPane>
+         <AnchorPane layoutY="90.0" prefHeight="24.0" prefWidth="205.0">
+            <HBox>
+               <Slider fx:id="decaySlider"
+                       blockIncrement="1"
+                       min="0"
+                       max="256"
+                       majorTickUnit="1"
+                       snapToTicks="true"
+                       styleClass="mySliders"
+               />
+               <Label fx:id="decayLabel" layoutY="-1.0" text="Decay : 0" style="-fx-text-fill: #ffff9e;"/>
+            </HBox>
+         </AnchorPane>
+         <AnchorPane layoutY="90.0" prefHeight="24.0" prefWidth="205.0">
+            <HBox>
+               <Slider fx:id="sustainSlider"
+                       blockIncrement="0.025"
+                       min="0"
+                       max="4"
+                       majorTickUnit="0.025"
+                       snapToTicks="true"
+                       styleClass="mySliders"
+               />
+               <Label fx:id="sustainLabel" layoutY="-1.0" text="Sustain : 0" style="-fx-text-fill: #ffff9e;"/>
+            </HBox>
+         </AnchorPane>
+      </VBox>
    </children>
    </VBox>
       <VBox  style="-fx-padding: 10;">
@@ -174,6 +176,12 @@
          <Pane maxHeight="64" minHeight="64" minWidth="256" maxWidth="256" style="-fx-background-color: #246c00; " >
             <Canvas fx:id="adsrCanvas" width="256" height="64" />
          </Pane>
+         <TextField fx:id="volField" disable="false"/>
+         <Label text="Phase Macro : " style="-fx-text-fill: #ffff9e;"/>
+         <Pane maxHeight="64" minHeight="64" minWidth="256" maxWidth="256" style="-fx-background-color: #b40000; " >
+            <Canvas fx:id="phaseCanvas" width="256" height="64" />
+         </Pane>
+         <TextField fx:id="phaseField" disable="false"/>
       </VBox>
    </HBox>
 </VBox>

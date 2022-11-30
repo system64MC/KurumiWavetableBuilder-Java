@@ -10,9 +10,19 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-import java.util.Arrays;
-
 public class OperatorView {
+    @FXML
+    private CheckBox custPhaseCheck;
+    @FXML
+    private Canvas phaseCanvas;
+    @FXML
+    private TextField phaseField;
+    @FXML
+    private VBox envBox;
+    @FXML
+    private CheckBox customVolEnvCheck;
+    @FXML
+    private TextField volField;
     @FXML
     private Label detuneLabel;
     @FXML
@@ -79,6 +89,8 @@ public class OperatorView {
     void initialize() {
         System.out.println();
         opVM = new OperatorViewModel();
+        opVM.isADSR().set(true);
+        opVM.standardPhaseProp().set(true);
         //waveSelect = new ComboBox<String>(FXCollections.observableList(Arrays.asList(Globals.waves)));
         waveSelect.setItems(FXCollections.observableList(Globals.wavesList));
         waveSelect.setValue("Sine");
@@ -94,6 +106,7 @@ public class OperatorView {
         addListeners();
         drawWave();
         drawADSR();
+        drawPhaseEnv();
         interpolationSelect.setDisable(true);
         //tlSlider = new Slider(10, 10, 10);
     }
@@ -131,6 +144,51 @@ public class OperatorView {
         gc.strokeLine(opVM.attackProp().get() + opVM.decayProp().get(), 64 - opVM.susProp().get() * 16, 512, 64 - opVM.susProp().get() * 16);
     }
 
+    void drawCustVolEnv() {
+        GraphicsContext gc = adsrCanvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, adsrCanvas.getWidth(), adsrCanvas.getHeight());
+        Color c = Color.rgb(255, 255, 255);
+        gc.setFill(c);
+        for(int x = 0; x < 256; x++)
+        {
+            double sample = (opVM.getOpModel().getCustEnv()[Math.min(x, opVM.getOpModel().getCustEnv().length-1)] / 4.0);
+            double sample1 = (opVM.getOpModel().getCustEnv()[Math.min(x + 1, opVM.getOpModel().getCustEnv().length-1)] / 4.0);
+            System.out.println("Sample = " + sample);
+            //gc.fillRect(x, sample, 2, 2);
+            gc.setStroke(c);
+            gc.setLineWidth(2);
+            gc.strokeLine(x,64 - sample, x + 1, 64 - sample1);
+            //gc.strokeLine(x, sample-1, x + 1, sample1);
+        }
+    }
+
+    void drawPhaseEnv() {
+        GraphicsContext gc = phaseCanvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, phaseCanvas.getWidth(), phaseCanvas.getHeight());
+        Color c = Color.rgb(255, 255, 255);
+        gc.setFill(c);
+        for(int x = 0; x < 256; x++)
+        {
+            double sample = (opVM.getOpModel().getPhaseEnv()[Math.min(x, opVM.getOpModel().getPhaseEnv().length-1)] / 4.0);
+            double sample1 = (opVM.getOpModel().getPhaseEnv()[Math.min(x + 1, opVM.getOpModel().getPhaseEnv().length-1)] / 4.0);
+            System.out.println("Sample = " + sample);
+            //gc.fillRect(x, sample, 2, 2);
+            gc.setStroke(c);
+            gc.setLineWidth(2);
+            gc.strokeLine(x,64 - sample, x + 1, 64 - sample1);
+            //gc.strokeLine(x, sample-1, x + 1, sample1);
+        }
+    }
+
+    void drawVolEnv() {
+        if(opVM.isADSR().get())
+        {
+            drawADSR();
+            return;
+        }
+        drawCustVolEnv();
+    }
+
     void doBindings() {
         tlSlider.valueProperty().bindBidirectional(opVM.tlVolumeProp());
         phaseSlider.valueProperty().bindBidirectional(opVM.phaseProp());
@@ -138,12 +196,20 @@ public class OperatorView {
         multSlider.valueProperty().bindBidirectional(opVM.multProp());
         feedbackSlider.valueProperty().bindBidirectional(opVM.feedbackProp());
         waveField.textProperty().bindBidirectional(opVM.waveStrProp());
+        volField.textProperty().bindBidirectional(opVM.volStrProp());
         phaseCheck.selectedProperty().bindBidirectional(opVM.phaseModProp());
+        customVolEnvCheck.selectedProperty().bindBidirectional(opVM.isADSR());
+        //customVolEnvCheck.selectedProperty().bindBidirectional(volField.disableProperty());
+        volField.disableProperty().bindBidirectional(customVolEnvCheck.selectedProperty());
         attackSlider.valueProperty().bindBidirectional(opVM.attackProp());
         decaySlider.valueProperty().bindBidirectional(opVM.decayProp());
         sustainSlider.valueProperty().bindBidirectional(opVM.susProp());
         revPhaseCheck.selectedProperty().bindBidirectional(opVM.revPhaseProp());
         detuneSlider.valueProperty().bindBidirectional(opVM.detuneProp());
+        envBox.visibleProperty().bindBidirectional(customVolEnvCheck.selectedProperty());
+        phaseField.textProperty().bindBidirectional(opVM.phaseStrProp());
+        custPhaseCheck.selectedProperty().bindBidirectional(opVM.standardPhaseProp());
+        phaseField.disableProperty().bindBidirectional(custPhaseCheck.selectedProperty());
     }
 
     void addListeners() {
@@ -163,7 +229,7 @@ public class OperatorView {
             tlLabel.setText("TL : " + opVM.tlVolumeProp().get());
             Globals.setStringTextField();
             drawWave();
-            drawADSR();
+            drawVolEnv();
         });
 
         phaseSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -220,6 +286,12 @@ public class OperatorView {
             Globals.setStringTextField();
             drawWave();
         });
+
+        volField.textProperty().addListener((obs, oldVal, newVal) -> {
+            Globals.setStringTextField();
+            drawWave();
+        });
+
         phaseCheck.onActionProperty().addListener((obs, oldVal, newVal) -> {
             Globals.setStringTextField();
             drawWave();
@@ -230,7 +302,7 @@ public class OperatorView {
             attackLabel.setText("Attack : " + opVM.attackProp().get());
             Globals.setStringTextField();
             drawWave();
-            drawADSR();
+            drawVolEnv();
         });
 
         decaySlider.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -238,14 +310,14 @@ public class OperatorView {
             decayLabel.setText("Decay : " + opVM.decayProp().get());
             Globals.setStringTextField();
             drawWave();
-            drawADSR();
+            drawVolEnv();
         });
 
         sustainSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             sustainLabel.setText("Sustain : " + opVM.susProp().get());
             Globals.setStringTextField();
             drawWave();
-            drawADSR();
+            drawVolEnv();
         });
 
         detuneSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -253,7 +325,25 @@ public class OperatorView {
             detuneLabel.setText("Detune : " + opVM.detuneProp().get());
             Globals.setStringTextField();
             drawWave();
-            drawADSR();
+            drawVolEnv();
+        });
+
+        customVolEnvCheck.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            Globals.setStringTextField();
+            drawWave();
+            drawVolEnv();
+        });
+
+        volField.textProperty().addListener((obs, oldVal, newVal) -> {
+            Globals.setStringTextField();
+            drawWave();
+            drawVolEnv();
+        });
+
+        phaseField.textProperty().addListener((obs, oldVal, newVal) -> {
+            Globals.setStringTextField();
+            drawWave();
+            drawPhaseEnv();
         });
     }
 

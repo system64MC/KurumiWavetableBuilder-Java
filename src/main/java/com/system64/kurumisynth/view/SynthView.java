@@ -2,6 +2,7 @@ package com.system64.kurumisynth.view;
 
 import com.sun.jndi.toolkit.url.Uri;
 import com.system64.kurumisynth.Main;
+import com.system64.kurumisynth.SoundPlayer;
 import com.system64.kurumisynth.model.Globals;
 import com.system64.kurumisynth.viewmodel.SynthViewModel;
 import javafx.event.ActionEvent;
@@ -31,6 +32,8 @@ import java.net.URL;
 import static com.sun.javafx.util.Utils.clamp;
 
 public class SynthView {
+    @FXML
+    private CheckBox soundCheck;
     @FXML
     private javafx.scene.control.TextArea macOutTA;
     @FXML
@@ -84,12 +87,19 @@ public class SynthView {
     private Label algLabel;
 
     FileChooser exportWav = new FileChooser();
+    FileChooser saveFile = new FileChooser();
+
+    FileChooser loadFile = new FileChooser();
 
     @FXML
     void initialize() {
         synthVM = new SynthViewModel();
         exportWav.setTitle("Export wavetable as WAV");
         exportWav.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("WAV Files", "*.wav"));
+        saveFile.setTitle("Save KWTB patch");
+        saveFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("KWTB files", "*.kwtb"));
+        loadFile.setTitle("Load KWTB patch");
+        loadFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("KWTB files", "*.kwtb"));
         Globals.txtField = this.waveOutTextField;
         Globals.setStringTextField();
         waveOutTextField.setOnMouseClicked(e -> {
@@ -211,6 +221,11 @@ public class SynthView {
             macLabel.setText("Wave Sequence : " + synthVM.macroProp().get());
             Globals.setStringTextField();
         });
+
+        soundCheck.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            Globals.sp.playing = newVal.booleanValue();
+            System.out.println(Globals.sp.playing);
+        });
     }
 
     private void copyToClipboard(Object tf) {
@@ -250,6 +265,26 @@ public class SynthView {
         macOutTA.setText(out);
     }
 
+    public void saveFile(ActionEvent actionEvent) throws IOException {
+        File file = saveFile.showSaveDialog(Globals.stage);
+        javafx.scene.control.Dialog<String> dialog = new javafx.scene.control.Dialog<>();
+        ButtonType but = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().add(but);
+        boolean ok = false;
+        ok = synthVM.saveToFile(file);
+        if(file != null) {
+            if(ok)
+            {
+                dialog.setTitle("Patch saved!");
+                dialog.setContentText("Patch saved with success!");
+            }
+            else {
+                dialog.setTitle("ERROR!");
+                dialog.setContentText("An error occurred during save!");
+            }
+            dialog.showAndWait();
+        }
+    }
     public void exportWav(ActionEvent actionEvent) throws IOException {
         File file = exportWav.showSaveDialog(Globals.stage);
         javafx.scene.control.Dialog<String> dialog = new javafx.scene.control.Dialog<>();
@@ -288,6 +323,25 @@ public class SynthView {
                 dialog.setTitle("ERROR!");
                 dialog.setContentText("An error occurred during export!");
             }
+            dialog.showAndWait();
+        }
+    }
+
+    public void resetDefault(ActionEvent actionEvent) {
+        synthVM.resetOps();
+    }
+
+    public void loadFile(ActionEvent actionEvent) throws IOException {
+        File file = loadFile.showOpenDialog(Globals.stage);
+        javafx.scene.control.Dialog<String> dialog = new javafx.scene.control.Dialog<>();
+        ButtonType but = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().add(but);
+        boolean ok = false;
+        ok = synthVM.loadFile(file);
+        if(!ok)
+        {
+            dialog.setTitle("Wrong format!");
+            dialog.setContentText("This is not a Kurumi KWTP patch!");
             dialog.showAndWait();
         }
     }

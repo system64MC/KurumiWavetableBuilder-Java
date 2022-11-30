@@ -8,6 +8,8 @@ import java.util.Arrays;
 
 
 public class OperatorViewModel {
+    private BooleanProperty isADSR = new SimpleBooleanProperty();
+
     public Operator getOpModel() {
         return opModel;
     }
@@ -29,6 +31,10 @@ public class OperatorViewModel {
     private FloatProperty susProp = new SimpleFloatProperty();
     private BooleanProperty revPhaseprop = new SimpleBooleanProperty();
     private IntegerProperty detuneProp = new SimpleIntegerProperty();
+    private StringProperty volStrProp = new SimpleStringProperty();
+    private StringProperty phaseStrProp = new SimpleStringProperty();
+    private BooleanProperty standardPhaseProp = new SimpleBooleanProperty();
+
     public OperatorViewModel() {
         opModel = new Operator();
         Globals.opVMs.add(this);
@@ -43,14 +49,34 @@ public class OperatorViewModel {
             System.out.println(opModel.getAdsr());
         }
         waveStrProp.set(getWTStr());
+        volStrProp.set(getEnvStr());
+        phaseStrProp.set(getPhaseStr());
         System.out.println("Creating Operator VM!");
     }
 
-    private String getWTStr() {
+    public String getWTStr() {
         String out = "";
         for(int i = 0; i < opModel.getWavetable().length; i++)
         {
             out += opModel.getWavetable()[i] + " ";
+        }
+        return out;
+    }
+
+    public String getEnvStr() {
+        String out = "";
+        for(int i = 0; i < opModel.getCustEnv().length; i++)
+        {
+            out += opModel.getCustEnv()[i] + " ";
+        }
+        return out;
+    }
+
+    public String getPhaseStr() {
+        String out = "";
+        for(int i = 0; i < opModel.getPhaseEnv().length; i++)
+        {
+            out += opModel.getPhaseEnv()[i] + " ";
         }
         return out;
     }
@@ -84,6 +110,14 @@ public class OperatorViewModel {
         return this.waveStrProp;
     }
 
+    public StringProperty phaseStrProp() {
+        return this.phaseStrProp;
+    }
+
+    public StringProperty volStrProp() {
+        return this.volStrProp;
+    }
+
     public BooleanProperty phaseModProp() {
         return this.phaseModProp;
     }
@@ -108,12 +142,21 @@ public class OperatorViewModel {
         return this.detuneProp;
     }
 
+    public BooleanProperty isADSR() {
+        return this.isADSR;
+    }
+
+    public BooleanProperty standardPhaseProp() {
+        return this.standardPhaseProp;
+    }
+
     private void strToWT() {
         int len = waveStrProp.get().length();
         if(len == 0)
         {
             int[] wt = {0};
             opModel.setWavetable(wt);
+            return;
         }
         int[] myWT = Arrays.stream(Arrays.stream(waveStrProp.get()
                 .trim()
@@ -121,6 +164,48 @@ public class OperatorViewModel {
                 .filter(x -> !x.equals(""))
                 .mapToInt(Integer::parseInt).toArray()).toArray();
         opModel.setWavetable(myWT);
+    }
+
+    private void strToEnv() {
+        int len = volStrProp.get().length();
+        if(len == 0)
+        {
+            int[] wt = {255};
+            opModel.setCustEnv(wt);
+            return;
+            // Set env in the model
+        }
+        int[] myWT = Arrays.stream(Arrays.stream(volStrProp.get()
+                        .trim()
+                        .split(" "))
+                .filter(x -> !x.equals(""))
+                .mapToInt(Integer::parseInt).toArray()).toArray();
+        int[] myWT2 = new int[myWT.length];
+        for(int i = 0; i < myWT.length; i++)
+            myWT2[i] = Math.min(myWT[i], 255);
+        opModel.setCustEnv(myWT2);
+
+    }
+
+    private void strToPhase() {
+        int len = phaseStrProp.get().length();
+        if(len == 0)
+        {
+            int[] wt = {0};
+            opModel.setPhaseEnv(wt);
+            return;
+            // Set env in the model
+        }
+        int[] myWT = Arrays.stream(Arrays.stream(phaseStrProp.get()
+                        .trim()
+                        .split(" "))
+                .filter(x -> !x.equals(""))
+                .mapToInt(Integer::parseInt).toArray()).toArray();
+        int[] myWT2 = new int[myWT.length];
+        for(int i = 0; i < myWT.length; i++)
+            myWT2[i] = Math.min(myWT[i], 255);
+        opModel.setPhaseEnv(myWT2);
+
     }
 
     public void setListeners() {
@@ -172,6 +257,20 @@ public class OperatorViewModel {
             Globals.drawWaveOut();
         });
 
+        volStrProp.addListener((obs, oldVal, newVal) -> {
+            strToEnv();
+            Globals.synth.synthesize();
+            Globals.drawWaveOut();
+
+        });
+
+        phaseStrProp.addListener((obs, oldVal, newVal) -> {
+            strToPhase();
+            Globals.synth.synthesize();
+            Globals.drawWaveOut();
+
+        });
+
         phaseModProp.addListener((obs, oldVal, newVal) -> {
             opModel.setPhaseMod(phaseModProp.get());
             Globals.synth.synthesize();
@@ -204,6 +303,18 @@ public class OperatorViewModel {
 
         detuneProp.addListener((obs, oldVal, newVal) -> {
             opModel.setDetune(newVal.intValue());
+            Globals.synth.synthesize();
+            Globals.drawWaveOut();
+        });
+
+        isADSR.addListener((obs, oldVal, newVal) -> {
+            opModel.setUseADSR(newVal.booleanValue());
+            Globals.synth.synthesize();
+            Globals.drawWaveOut();
+        });
+
+        standardPhaseProp.addListener((obs, oldVal, newVal) -> {
+            opModel.setStandardPhase(newVal.booleanValue());
             Globals.synth.synthesize();
             Globals.drawWaveOut();
         });

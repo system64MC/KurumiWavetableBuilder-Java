@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class Main extends Application {
+    private SoundPlayer sp = new SoundPlayer();
     @Override
     public void start(Stage stage) throws IOException {
         //FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("hello-view.fxml"));
@@ -24,6 +25,14 @@ public class Main extends Application {
         setIcon(stage);
         stage.show();
         Globals.stage = stage;
+        //sp.run();
+        sp.play();
+        Globals.sp = sp;
+    }
+
+    @Override
+    public void stop() {
+        sp.stop();
     }
 
     private void setIcon(Stage stage) throws IOException {

@@ -113,6 +113,26 @@ public class Synth {
         //System.out.println(myArrayList);
         //System.out.println(operators[3]);
     }
+
+    public ArrayList<Integer> synthesize2() {
+        ArrayList<Float> myArrayList = new ArrayList<Float>();
+        for (int x = 0; x < waveLen; x++)
+        {
+            myArrayList.add(clamp(-1, fm(x) * gain, 1));
+        }
+        myArrayList = smooth(myArrayList);
+        ArrayList<Integer> outList = new ArrayList<Integer>();
+        for(int c = 0; c < waveLen; c++)
+        {
+            int tmp = Math.round((myArrayList.get(c) + 1) * ((float) waveHeight / 2));
+            //System.out.println(tmp);
+            outList.add(tmp);
+        }
+        return outList;
+        //System.out.println(myArrayList);
+        //System.out.println(operators[3]);
+    }
+
     private int modulo(int a, int b) {
         return ((a % b) + b) % b;
     }
