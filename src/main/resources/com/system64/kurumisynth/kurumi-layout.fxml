@@ -124,13 +124,13 @@
                         <AnchorPane prefHeight="30.0" >
                            <children>
                               <Slider fx:id="macLenSlider" blockIncrement="1.0" max="256.0" min="1" styleClass="mySliders" />
-                              <Label fx:id="macLenLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Macro Length : 64" />
+                              <Label fx:id="macLenLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Sequence Length : 64" />
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="30.0" >
                            <children>
                               <Slider fx:id="macSlider" blockIncrement="1.0" max="63.0" styleClass="mySliders" />
-                              <Label fx:id="macLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Wave sequence : 0" />
+                              <Label fx:id="macLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Wave Sequence Index : 0" />
                            </children>
                         </AnchorPane>
                          <AnchorPane prefHeight="30.0" >

@@ -295,6 +295,8 @@ public class SynthViewModel {
         op.standardPhaseProp().set(true);
         op.phaseProp().set(0);
         op.tlVolumeProp().set(1);
+        op.multProp().set(1);
+        op.interpolationProp().set(0);
         op.revPhaseProp().set(false);
         op.phaseModProp().set(false);
         op.attackProp().set(0);

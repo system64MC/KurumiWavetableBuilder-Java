@@ -208,7 +208,7 @@ public class SynthView {
         macLenSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             macLenSlider.setValue(newVal.intValue());
             //synthVM.macroLenProp().set(newVal.intValue());
-            macLenLabel.setText("Macro Length : " + synthVM.macroLenProp().get());
+            macLenLabel.setText("Sequence Length : " + synthVM.macroLenProp().get());
             macSlider.setValue(clamp(0, macSlider.getValue(), newVal.intValue() - 1));
             macSlider.setMax(newVal.intValue() - 1);
             Globals.setStringTextField();
@@ -218,7 +218,7 @@ public class SynthView {
             macSlider.setValue(newVal.intValue());
             //Globals.macro = newVal.intValue();
             //algDisplay.setViewport(new Rectangle2D(synthVM.algProp().get() * 128, 0.0, 128, 64.0));
-            macLabel.setText("Wave Sequence : " + synthVM.macroProp().get());
+            macLabel.setText("Wave Sequence Index : " + synthVM.macroProp().get());
             Globals.setStringTextField();
         });
 
