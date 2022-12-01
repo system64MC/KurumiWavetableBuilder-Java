@@ -287,6 +287,9 @@ public class SynthViewModel {
             op.modProp().set(0);
             op.waveProp().set(0);
             op.waveStrProp().set("16 25 30 31 30 29 26 25 25 28 31 28 18 11 10 13 17 20 22 20 15 6 0 2 6 5 3 1 0 0 1 4 ");
+            op.morphStrProp().set("16 20 15 11 11 24 30 31 28 20 10 2 0 3 5 0 16 31 26 28 31 29 21 11 3 0 1 7 20 20 16 11 ");
+            op.morphFramesProp().set(64);
+            op.isMorphEnabledProp().set(true);
             op.volStrProp().set("255 ");
             op.phaseStrProp().set("0 ");
         }
@@ -307,6 +310,9 @@ public class SynthViewModel {
         op.modProp().set(0);
         op.waveProp().set(0);
         op.waveStrProp().set("16 25 30 31 30 29 26 25 25 28 31 28 18 11 10 13 17 20 22 20 15 6 0 2 6 5 3 1 0 0 1 4 ");
+        op.morphStrProp().set("16 20 15 11 11 24 30 31 28 20 10 2 0 3 5 0 16 31 26 28 31 29 21 11 3 0 1 7 20 20 16 11 ");
+        op.morphFramesProp().set(64);
+        op.isMorphEnabledProp().set(true);
         op.volStrProp().set("255 ");
         op.phaseStrProp().set("0 ");
         this.algProp.set(0);
@@ -314,6 +320,7 @@ public class SynthViewModel {
     }
 
     public boolean loadFile(File file) throws IOException {
+        resetOps();
         FileInputStream fs = new FileInputStream(file);
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         int nRead;
@@ -433,6 +440,18 @@ public class SynthViewModel {
             opVM.susProp().set((float) mySus / 10000.0f);
             index += 2;
 
+            // To ensure backwards compatibility
+            if(myVersion >= 2)
+            {
+                // Morph duration
+                opVM.morphFramesProp().set((((int) data[index]) + 256) & 0xFF);
+                index++;
+
+                // Is morph disabled?
+                opVM.isMorphEnabledProp().set(data[index] >= 1 ? true : false);
+                index++;
+            }
+
             // Waveform data
             int wLen = (((int) data[index]) + 256) & 0xFF;
             wLen++;
@@ -443,6 +462,18 @@ public class SynthViewModel {
             opVM.getOpModel().setWavetable(wt);
             opVM.waveStrProp().set(opVM.getWTStr());
             index += wLen;
+
+            if (myVersion >= 2) {
+                int mLen = (((int) data[index]) + 256) & 0xFF;
+                mLen++;
+                index++;
+                int[] morph = new int[mLen];
+                for (int j = 0; j < mLen; j++)
+                    morph[j] = (((int) data[index + j]) + 256) & 0xFF;
+                opVM.getOpModel().setWavetable(morph);
+                opVM.waveStrProp().set(opVM.getMorphStr());
+                index += wLen;
+            }
 
             // ADSR data
             int aLen = (((int) data[index]) + 256) & 0xFF;
@@ -470,7 +501,7 @@ public class SynthViewModel {
         return true;
     }
 
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     public boolean saveToFile(File file) throws IOException {
         ArrayList<Byte> out = new ArrayList<>();
         // Header
@@ -552,12 +583,26 @@ public class SynthViewModel {
             out.add((byte) (sus & 0xFF)); // LSB
             out.add((byte) (sus >>> 8)); // MSB
 
+            // Morphing duration
+            out.add((byte) (op.getMorphFrames()));
+
+            // Is morphing disabled?
+            out.add((byte) (op.isMorphDisabled() ? 1 : 0));
+
             // Custom waveform data
             int[] waveform = op.getWavetable();
             out.add((byte) (waveform.length - 1)); // Length of waveform
             for(int j = 0; j < waveform.length; j++) // The data
             {
                 out.add((byte) (waveform[j] & 0xFF));
+            }
+
+            // Custom Morph data
+            int[] morph = op.getWavetableMorph();
+            out.add((byte) (morph.length - 1)); // Length of waveform
+            for(int j = 0; j < morph.length; j++) // The data
+            {
+                out.add((byte) (morph[j] & 0xFF));
             }
 
             // Custom ADSR data

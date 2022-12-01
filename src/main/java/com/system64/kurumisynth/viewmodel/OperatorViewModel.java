@@ -34,10 +34,16 @@ public class OperatorViewModel {
     private StringProperty volStrProp = new SimpleStringProperty();
     private StringProperty phaseStrProp = new SimpleStringProperty();
     private BooleanProperty standardPhaseProp = new SimpleBooleanProperty();
+    private BooleanProperty isMorphEnabledProp = new SimpleBooleanProperty();
+    private StringProperty morphStrProp = new SimpleStringProperty();
+
+    private IntegerProperty morphFramesProp = new SimpleIntegerProperty();
 
     public OperatorViewModel() {
         opModel = new Operator();
         Globals.opVMs.add(this);
+        isMorphEnabledProp.set(opModel.isMorphDisabled());
+        morphFramesProp.set(opModel.getMorphFrames());
         setListeners();
         if (Globals.opVMs.indexOf(this) == 3)
         {
@@ -51,6 +57,7 @@ public class OperatorViewModel {
         waveStrProp.set(getWTStr());
         volStrProp.set(getEnvStr());
         phaseStrProp.set(getPhaseStr());
+        morphStrProp.set(getMorphStr());
         System.out.println("Creating Operator VM!");
     }
 
@@ -59,6 +66,15 @@ public class OperatorViewModel {
         for(int i = 0; i < opModel.getWavetable().length; i++)
         {
             out += opModel.getWavetable()[i] + " ";
+        }
+        return out;
+    }
+
+    public String getMorphStr() {
+        String out = "";
+        for(int i = 0; i < opModel.getWavetableMorph().length; i++)
+        {
+            out += opModel.getWavetableMorph()[i] + " ";
         }
         return out;
     }
@@ -150,6 +166,18 @@ public class OperatorViewModel {
         return this.standardPhaseProp;
     }
 
+    public BooleanProperty isMorphEnabledProp() {
+        return this.isMorphEnabledProp;
+    }
+
+    public StringProperty morphStrProp() {
+        return this.morphStrProp;
+    }
+
+    public IntegerProperty morphFramesProp() {
+        return this.morphFramesProp;
+    }
+
     private void strToWT() {
         int len = waveStrProp.get().length();
         if(len == 0)
@@ -164,6 +192,22 @@ public class OperatorViewModel {
                 .filter(x -> !x.equals(""))
                 .mapToInt(Integer::parseInt).toArray()).toArray();
         opModel.setWavetable(myWT);
+    }
+
+    private void strToMorph() {
+        int len = morphStrProp.get().length();
+        if(len == 0)
+        {
+            int[] wt = {0};
+            opModel.setWavetableMorph(wt);
+            return;
+        }
+        int[] myWT = Arrays.stream(Arrays.stream(morphStrProp.get()
+                        .trim()
+                        .split(" "))
+                .filter(x -> !x.equals(""))
+                .mapToInt(Integer::parseInt).toArray()).toArray();
+        opModel.setWavetableMorph(myWT);
     }
 
     private void strToEnv() {
@@ -315,6 +359,24 @@ public class OperatorViewModel {
 
         standardPhaseProp.addListener((obs, oldVal, newVal) -> {
             opModel.setStandardPhase(newVal.booleanValue());
+            Globals.synth.synthesize();
+            Globals.drawWaveOut();
+        });
+
+        morphStrProp.addListener((obs, oldVal, newVal) -> {
+            strToMorph();
+            Globals.synth.synthesize();
+            Globals.drawWaveOut();
+        });
+
+        morphFramesProp.addListener((obs, oldVal, newVal) -> {
+            opModel.setMorphFrames(newVal.intValue());
+            Globals.synth.synthesize();
+            Globals.drawWaveOut();
+        });
+
+        isMorphEnabledProp.addListener((obs, oldVal, newVal) -> {
+            opModel.setMorphDisabled(newVal.booleanValue());
             Globals.synth.synthesize();
             Globals.drawWaveOut();
         });

@@ -30,6 +30,27 @@ public class Operator {
 
     private int[] wavetable = {16, 25, 30, 31, 30, 29, 26, 25, 25, 28, 31, 28, 18, 11, 10, 13, 17, 20, 22, 20, 15, 6, 0, 2, 6, 5, 3, 1, 0, 0, 1, 4};
 
+    public int[] getWavetableMorph() {
+        return wavetableMorph;
+    }
+
+    public void setWavetableMorph(int[] wavetableMorph) {
+        this.wavetableMorph = wavetableMorph;
+    }
+
+    private int[] wavetableMorph = {16, 20, 15, 11, 11, 24, 30, 31, 28, 20, 10, 2, 0, 3, 5, 0, 16, 31, 26, 28, 31, 29, 21, 11, 3, 0, 1, 7, 20, 20, 16, 11};
+
+    public boolean isMorphDisabled() {
+        return morphDisabled;
+    }
+
+    public void setMorphDisabled(boolean morphDisabled) {
+        this.morphDisabled = morphDisabled;
+        System.out.println("Enabled? " + morphDisabled);
+    }
+
+    private boolean morphDisabled = true;
+
     public void setCustEnv(int[] custEnv) {
         this.custEnv = custEnv;
     }
@@ -311,50 +332,79 @@ public class Operator {
         // 30 - Squi. Abs. Cubed Triangle
         waves.add(x -> Math.pow(waves.get(24).applyAsDouble(x), 3));
         // 31 - Custom
-        waves.add(x -> interpolate(x * wavetable.length * mult + (phase * wavetable.length + pGetPhase() * wavetable.length)));
+        waves.add(x -> getWTSample(x));
     }
 
-    private double noInterpolation(double x) {
+    private double lerp(double x, double y, double a)
+    {
+        return x * (1 - a) + y * a;
+    }
+
+    public int getMorphFrames() {
+        return morphFrames;
+    }
+
+    public void setMorphFrames(int morphFrames) {
+        this.morphFrames = morphFrames;
+    }
+
+    private int morphFrames = 64;
+
+    private double getWTSample(double x)
+    {
+        System.out.println("getting sample!");
+        if(!morphDisabled)
+        {
+            double a = interpolate(x * wavetable.length * mult + (phase * wavetable.length + pGetPhase() * wavetable.length), wavetable);
+            double b = interpolate(x * wavetableMorph.length * mult + (phase * wavetableMorph.length + pGetPhase() * wavetableMorph.length), wavetableMorph);
+            double c = Globals.synth.getMacro() > morphFrames ? 1 : Globals.synth.getMacro() / (double)morphFrames;
+            System.out.println(Arrays.toString(wavetableMorph));
+            return lerp(a, b, c);
+        }
+        return interpolate(x * wavetable.length * mult + (phase * wavetable.length + pGetPhase() * wavetable.length), wavetable);
+    }
+
+    private double noInterpolation(double x, int[] wt) {
         double t = x;
         int idx = (int) Math.floor(t);
-        int len = wavetable.length;
-        double max = (double)Arrays.stream(wavetable).max().getAsInt() / 2;
-        double s0 = (wavetable[(int) modulo(idx, len)] / max) - 1;
+        int len = wt.length;
+        double max = (double)Arrays.stream(wt).max().getAsInt() / 2;
+        double s0 = (wt[(int) modulo(idx, len)] / max) - 1;
         return s0;
     }
 
-    private double linear(double x) {
+    private double linear(double x, int[] wt) {
         double t = x;
         int idx = (int) Math.floor(t);
-        int len = wavetable.length;
-        double max = (double)Arrays.stream(wavetable).max().getAsInt() / 2;
+        int len = wt.length;
+        double max = (double)Arrays.stream(wt).max().getAsInt() / 2;
         double mu = (t - idx);
-        double s0 = (double)wavetable[modulo(idx, len)] / max - 1;
-        double s1 = (double)wavetable[modulo(idx + 1, len)] / max - 1;
+        double s0 = (double)wt[modulo(idx, len)] / max - 1;
+        double s1 = (double)wt[modulo(idx + 1, len)] / max - 1;
         return s0 + mu * s1 - (mu * s0);
     }
 
-    private double cosine(double x) {
+    private double cosine(double x, int[] wt) {
         double t = x;
         int idx = (int) Math.floor(t);
-        int len = wavetable.length;
-        double max = (double)Arrays.stream(wavetable).max().getAsInt() / 2;
+        int len = wt.length;
+        double max = (double)Arrays.stream(wt).max().getAsInt() / 2;
         double mu = (t - idx);
         double muCos = (1 - Math.cos(mu * Math.PI)) / 2;
-        double s0 = (double)wavetable[modulo(idx, len)] / max - 1;
-        double s1 = (double)wavetable[modulo(idx + 1, len)] / max - 1;
+        double s0 = (double)wt[modulo(idx, len)] / max - 1;
+        double s1 = (double)wt[modulo(idx + 1, len)] / max - 1;
         return s0 + muCos * s1 - (muCos * s0);
     }
 
-    private double cubic(double x) {
-        double max = (double)Arrays.stream(wavetable).max().getAsInt() / 2;
-        int len = wavetable.length;
+    private double cubic(double x, int[] wt) {
+        double max = (double)Arrays.stream(wt).max().getAsInt() / 2;
+        int len = wt.length;
         double t = x;
         int idx = (int) Math.floor(t);
-        double s0 = (double)wavetable[modulo(idx - 1, len)] / max - 1;
-        double s1 = (double)wavetable[modulo(idx, len)] / max - 1;
-        double s2 = (double)wavetable[modulo(idx + 1, len)] / max - 1;
-        double s3 = (double)wavetable[modulo(idx + 2, len)] / max - 1;
+        double s0 = (double)wt[modulo(idx - 1, len)] / max - 1;
+        double s1 = (double)wt[modulo(idx, len)] / max - 1;
+        double s2 = (double)wt[modulo(idx + 1, len)] / max - 1;
+        double s3 = (double)wt[modulo(idx + 2, len)] / max - 1;
 
         double mu = (t - idx);
         double mu2 = mu * mu;
@@ -367,19 +417,19 @@ public class Operator {
         return (a0 * mu * mu2 + a1 * mu2 + a2 * mu + a3);
 
     }
-    private double interpolate(double x) {
+    private double interpolate(double x, int[] wt) {
         switch (interpolation)
         {
             case 0:
-                return noInterpolation(x);
+                return noInterpolation(x, wt);
             case 1:
-                return linear(x);
+                return linear(x, wt);
             case 2:
-                return cosine(x);
+                return cosine(x, wt);
             case 3:
-                return cubic(x);
+                return cubic(x, wt);
         }
-        return noInterpolation(x);
+        return noInterpolation(x, wt);
     }
 
     /*List<Function<Double, Double>> ops = Arrays.asList(

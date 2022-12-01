@@ -159,6 +159,12 @@ public class SynthView {
             opBox.getChildren().add(myVbox);
         }
     }
+
+    void redrawOpWaves() {
+        for (OperatorView op : Globals.operatorViews) {
+            op.drawWave();
+        }
+    }
     void doBindings() {
         //synthVM.algProp()
         algSlider.valueProperty().bindBidirectional(synthVM.algProp());
@@ -176,6 +182,7 @@ public class SynthView {
             algDisplay.setViewport(new Rectangle2D(synthVM.algProp().get() * 128, 0.0, 128, 64.0));
             algLabel.setText("Algorithm : " + synthVM.algProp().get());
             Globals.setStringTextField();
+            redrawOpWaves();
             //synthVM.algProp().set(newVal.byteValue());
             //System.out.println(synthVM.algProp());
             //synth.setAlgorithm(newVal.byteValue());
@@ -185,23 +192,27 @@ public class SynthView {
             lenSlider.setValue(newVal.intValue());
             lenLabel.setText("Length : " + synthVM.waveLenProp().get());
             Globals.setStringTextField();
+            redrawOpWaves();
         });
 
         heiSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             heiSlider.setValue(newVal.intValue());
             heiLabel.setText("Height : " + synthVM.waveHeiProp().get());
             Globals.setStringTextField();
+            redrawOpWaves();
         });
 
         gainSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             gainLabel.setText("Gain : " + synthVM.gainProp().get());
             Globals.setStringTextField();
+            redrawOpWaves();
         });
 
         smoothSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             smoothSlider.setValue(newVal.intValue());
             smoothLabel.setText("Avg. Filter window : " + synthVM.smoothWinProp().get());
             Globals.setStringTextField();
+            redrawOpWaves();
             //synth.setSmoothWin(newVal.intValue());
         });
 
@@ -212,6 +223,7 @@ public class SynthView {
             macSlider.setValue(clamp(0, macSlider.getValue(), newVal.intValue() - 1));
             macSlider.setMax(newVal.intValue() - 1);
             Globals.setStringTextField();
+            redrawOpWaves();
         });
 
         macSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -220,11 +232,13 @@ public class SynthView {
             //algDisplay.setViewport(new Rectangle2D(synthVM.algProp().get() * 128, 0.0, 128, 64.0));
             macLabel.setText("Wave Sequence Index : " + synthVM.macroProp().get());
             Globals.setStringTextField();
+            redrawOpWaves();
         });
 
         soundCheck.selectedProperty().addListener((obs, oldVal, newVal) -> {
             Globals.sp.playing = newVal.booleanValue();
             System.out.println(Globals.sp.playing);
+            redrawOpWaves();
         });
     }
 

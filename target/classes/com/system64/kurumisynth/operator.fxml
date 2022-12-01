@@ -160,6 +160,20 @@
                <Label fx:id="sustainLabel" layoutY="-1.0" text="Sustain : 0" style="-fx-text-fill: #ffff9e;"/>
             </HBox>
          </AnchorPane>
+         <CheckBox fx:id="morphCheck" text="Do not morph (uncheck to enable)" style="-fx-text-fill: #ffff9e;"/>
+         <AnchorPane fx:id="morphBox" visible="true" layoutY="90.0" prefHeight="24.0" prefWidth="205.0">
+            <HBox>
+               <Slider fx:id="morphSlider"
+                       blockIncrement="1"
+                       min="1"
+                       max="256"
+                       majorTickUnit="1"
+                       snapToTicks="true"
+                       styleClass="mySliders"
+               />
+               <Label fx:id="morphLabel" layoutY="-1.0" text="Morph time len. : 64" style="-fx-text-fill: #ffff9e;"/>
+            </HBox>
+         </AnchorPane>
       </VBox>
    </children>
    </VBox>
@@ -172,6 +186,8 @@
             <Canvas fx:id="waveCanvas" width="256" height="64" />
          </Pane>
          <TextField fx:id="waveField" disable="true"/>
+         <Label text="Waveform to morph to :" style="-fx-text-fill: #ffff9e;"/>
+         <TextField fx:id="morphField" disable="true"/>
          <Label text="ADSR : " style="-fx-text-fill: #ffff9e;"/>
          <Pane maxHeight="64" minHeight="64" minWidth="256" maxWidth="256" style="-fx-background-color: #246c00; " >
             <Canvas fx:id="adsrCanvas" width="256" height="64" />

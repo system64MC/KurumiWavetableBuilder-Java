@@ -1,6 +1,7 @@
 package com.system64.kurumisynth.model;
 
 import com.system64.kurumisynth.SoundPlayer;
+import com.system64.kurumisynth.view.OperatorView;
 import com.system64.kurumisynth.viewmodel.OperatorViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -137,9 +138,11 @@ public class Globals {
             //fillRect(i * 4, 20, 3, waveOutput.get(i))
 
         }
-        System.out.println(waveOutput);
+        //System.out.println(waveOutput);
         //waveDrawCvs.getGraphicsContext2D().fillRect(10, 10, 20, 20);
     }
+
+    public static ArrayList<OperatorView> operatorViews = new ArrayList<>();
 
     public static String getWaveOutStr() {
         StringBuilder str = new StringBuilder();

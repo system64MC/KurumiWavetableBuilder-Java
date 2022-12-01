@@ -7,10 +7,21 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class OperatorView {
+    @FXML
+    private AnchorPane morphBox;
+    @FXML
+    private CheckBox morphCheck;
+    @FXML
+    private TextField morphField;
+    @FXML
+    private Slider morphSlider;
+    @FXML
+    private Label morphLabel;
     @FXML
     private CheckBox custPhaseCheck;
     @FXML
@@ -108,6 +119,7 @@ public class OperatorView {
         drawADSR();
         drawPhaseEnv();
         interpolationSelect.setDisable(true);
+        Globals.operatorViews.add(this);
         //tlSlider = new Slider(10, 10, 10);
     }
 
@@ -153,7 +165,6 @@ public class OperatorView {
         {
             double sample = (opVM.getOpModel().getCustEnv()[Math.min(x, opVM.getOpModel().getCustEnv().length-1)] / 4.0);
             double sample1 = (opVM.getOpModel().getCustEnv()[Math.min(x + 1, opVM.getOpModel().getCustEnv().length-1)] / 4.0);
-            System.out.println("Sample = " + sample);
             //gc.fillRect(x, sample, 2, 2);
             gc.setStroke(c);
             gc.setLineWidth(2);
@@ -171,7 +182,6 @@ public class OperatorView {
         {
             double sample = (opVM.getOpModel().getPhaseEnv()[Math.min(x, opVM.getOpModel().getPhaseEnv().length-1)] / 4.0);
             double sample1 = (opVM.getOpModel().getPhaseEnv()[Math.min(x + 1, opVM.getOpModel().getPhaseEnv().length-1)] / 4.0);
-            System.out.println("Sample = " + sample);
             //gc.fillRect(x, sample, 2, 2);
             gc.setStroke(c);
             gc.setLineWidth(2);
@@ -210,6 +220,13 @@ public class OperatorView {
         phaseField.textProperty().bindBidirectional(opVM.phaseStrProp());
         custPhaseCheck.selectedProperty().bindBidirectional(opVM.standardPhaseProp());
         phaseField.disableProperty().bindBidirectional(custPhaseCheck.selectedProperty());
+
+        morphCheck.selectedProperty().bindBidirectional(opVM.isMorphEnabledProp());
+        morphField.disableProperty().bindBidirectional(morphCheck.selectedProperty());
+        //morphBox.visibleProperty().bindBidirectional(morphCheck.selectedProperty());
+        morphBox.disableProperty().bindBidirectional(opVM.isMorphEnabledProp());
+        morphField.textProperty().bindBidirectional(opVM.morphStrProp());
+        morphSlider.valueProperty().bindBidirectional(opVM.morphFramesProp());
     }
 
     void addListeners() {
@@ -341,6 +358,26 @@ public class OperatorView {
         });
 
         phaseField.textProperty().addListener((obs, oldVal, newVal) -> {
+            Globals.setStringTextField();
+            drawWave();
+            drawPhaseEnv();
+        });
+
+        morphSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            morphSlider.setValue(newVal.intValue());
+            morphLabel.setText("Morph time len. : " + opVM.morphFramesProp().get());
+            Globals.setStringTextField();
+            drawWave();
+            drawPhaseEnv();
+        });
+
+        morphField.textProperty().addListener((obs, oldVal, newVal) -> {
+            Globals.setStringTextField();
+            drawWave();
+            drawPhaseEnv();
+        });
+
+        morphCheck.selectedProperty().addListener((obs, oldVal, newVal) -> {
             Globals.setStringTextField();
             drawWave();
             drawPhaseEnv();
