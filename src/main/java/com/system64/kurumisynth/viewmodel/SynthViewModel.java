@@ -62,6 +62,8 @@ public class SynthViewModel {
         macroProp.addListener((obs, oldVal, newVal) -> {
             synthModel.setMacro(newVal.intValue());
             synthModel.synthesize();
+            // Sussy feedback fix...
+            synthModel.synthesize();
             Globals.drawWaveOut();
         });
 

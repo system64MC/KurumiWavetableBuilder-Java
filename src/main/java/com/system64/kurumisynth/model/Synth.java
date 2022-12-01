@@ -96,6 +96,10 @@ public class Synth {
     }
 
     public void synthesize() {
+        /*for (Operator op:
+                operators) {
+            op.setPrev(0);
+        }*/
         ArrayList<Float> myArrayList = new ArrayList<Float>();
         for (int x = 0; x < waveLen; x++)
         {
