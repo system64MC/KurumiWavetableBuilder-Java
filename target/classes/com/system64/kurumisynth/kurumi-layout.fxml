@@ -55,131 +55,131 @@
 <?import javafx.scene.control.CheckBox?>
 <VBox style="-fx-background-color: #14161F;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.system64.kurumisynth.view.SynthView">
     <children>
-    <MenuBar>
-      <menus>
-        <Menu mnemonicParsing="false" text="File">
-          <items>
-            <MenuItem mnemonicParsing="false" text="New" />
-            <MenuItem onAction="#loadFile" mnemonicParsing="false" text="Open…" />
-              <Menu mnemonicParsing="false" text="Export" >
-                  <MenuItem onAction="#exportWav" text=".WAV"/>
-                  <MenuItem onAction="#exportSeqAsWav" text="Sequence as .WAV"/>
-              </Menu>
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem onAction="#saveFile" mnemonicParsing="false" text="Save" />
-            <MenuItem mnemonicParsing="false" text="Reset to default values" onAction="#resetDefault" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Quit" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Edit">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Undo" />
-            <MenuItem mnemonicParsing="false" text="Redo" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Cut" />
-            <MenuItem mnemonicParsing="false" text="Copy" />
-            <MenuItem mnemonicParsing="false" text="Paste" />
-            <MenuItem mnemonicParsing="false" text="Delete" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select All" />
-            <MenuItem mnemonicParsing="false" text="Unselect All" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Help">
-          <items>
-            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
-          </items>
-        </Menu>
-      </menus>
-    </MenuBar>
-      <HBox>
-         <children>
-            <VBox style="-fx-padding: 20;" >
-               <children>
-                   <ImageView fx:id="algDisplay" pickOnBounds="true" preserveRatio="false" scaleX="1" scaleY="1" smooth="false">
+        <MenuBar>
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="New" />
+                        <MenuItem onAction="#loadFile" mnemonicParsing="false" text="Open…" />
+                        <Menu mnemonicParsing="false" text="Export" >
+                            <MenuItem onAction="#exportWav" text=".WAV"/>
+                            <MenuItem onAction="#exportSeqAsWav" text="Sequence as .WAV"/>
+                        </Menu>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem onAction="#saveFile" mnemonicParsing="false" text="Save" />
+                        <MenuItem mnemonicParsing="false" text="Reset to default values" onAction="#resetDefault" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Quit" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Undo" />
+                        <MenuItem mnemonicParsing="false" text="Redo" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Cut" />
+                        <MenuItem mnemonicParsing="false" text="Copy" />
+                        <MenuItem mnemonicParsing="false" text="Paste" />
+                        <MenuItem mnemonicParsing="false" text="Delete" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Select All" />
+                        <MenuItem mnemonicParsing="false" text="Unselect All" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <HBox>
+            <children>
+                <VBox style="-fx-padding: 20;" >
+                    <children>
+                        <ImageView fx:id="algDisplay" pickOnBounds="true" preserveRatio="false" scaleX="1" scaleY="1" smooth="false">
 
-                   </ImageView>
-                  <VBox >
-                     <children>
-                        <AnchorPane prefHeight="30.0" >
-                           <children>
-                               <Slider fx:id="algSlider" blockIncrement="1.0" cache="true" majorTickUnit="1.0" max="11.0" min="0.0" minorTickCount="0" showTickLabels="false" showTickMarks="true" snapToTicks="true" styleClass="mySliders" />
-                               <Label fx:id="algLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Algorithm : 0" />
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane prefHeight="30.0" >
-                           <children>
-                               <Slider fx:id="gainSlider" blockIncrement="0.01" majorTickUnit="0.01" max="4.0" min="0" snapToTicks="true" styleClass="mySliders" />
-                              <Label fx:id="gainLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Gain : 1" />
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane prefHeight="30.0" >
-                           <children>
-                              <Slider fx:id="smoothSlider" blockIncrement="1.0" max="128.0" min="0" styleClass="mySliders" />
-                              <Label fx:id="smoothLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Avg. Filter window : 0" />
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane prefHeight="30.0" >
-                           <children>
-                              <Slider fx:id="macLenSlider" blockIncrement="1.0" max="256.0" min="1" styleClass="mySliders" />
-                              <Label fx:id="macLenLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Sequence Length : 64" />
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane prefHeight="30.0" >
-                           <children>
-                              <Slider fx:id="macSlider" blockIncrement="1.0" max="63.0" styleClass="mySliders" />
-                              <Label fx:id="macLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Wave Sequence Index : 0" />
-                           </children>
-                        </AnchorPane>
-                         <AnchorPane prefHeight="30.0" >
-                         <TextField fx:id="waveOutTextField" prefWidth="200" editable="false">
+                        </ImageView>
+                        <VBox >
+                            <children>
+                                <AnchorPane prefHeight="30.0" >
+                                    <children>
+                                        <Slider fx:id="algSlider" blockIncrement="1.0" cache="true" majorTickUnit="1.0" max="11.0" min="0.0" minorTickCount="0" showTickLabels="false" showTickMarks="true" snapToTicks="true" styleClass="mySliders" />
+                                        <Label fx:id="algLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Algorithm : 0" />
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane prefHeight="30.0" >
+                                    <children>
+                                        <Slider fx:id="gainSlider" blockIncrement="0.01" majorTickUnit="0.01" max="4.0" min="0" snapToTicks="true" styleClass="mySliders" />
+                                        <Label fx:id="gainLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Gain : 1" />
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane prefHeight="30.0" >
+                                    <children>
+                                        <Slider fx:id="smoothSlider" blockIncrement="1.0" max="128.0" min="0" styleClass="mySliders" />
+                                        <Label fx:id="smoothLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Avg. Filter window : 0" />
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane prefHeight="30.0" >
+                                    <children>
+                                        <Slider fx:id="macLenSlider" blockIncrement="1.0" max="256.0" min="1" styleClass="mySliders" />
+                                        <Label fx:id="macLenLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Sequence Length : 64" />
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane prefHeight="30.0" >
+                                    <children>
+                                        <Slider fx:id="macSlider" blockIncrement="1.0" max="63.0" styleClass="mySliders" />
+                                        <Label fx:id="macLabel" layoutX="158.0" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Wave Sequence Index : 0" />
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane prefHeight="30.0" >
+                                    <TextField fx:id="waveOutTextField" prefWidth="200" editable="false">
 
-                         </TextField>
+                                    </TextField>
 
-                         </AnchorPane>
-                         <VBox prefHeight="90">
-                             <TextArea fx:id="macOutTA" prefWidth="200" editable="false" prefHeight="128">
+                                </AnchorPane>
+                                <VBox prefHeight="90">
+                                    <TextArea fx:id="macOutTA" prefWidth="200" editable="false" prefHeight="128">
 
-                             </TextArea>
-                             <Button text="generate sequence" onAction="#genMacro"/>
-                         </VBox>
-                         <CheckBox fx:id="soundCheck" selected="false" text="Play sound" style="-fx-text-fill: #ffff9e;"/>
+                                    </TextArea>
+                                    <Button text="generate sequence" onAction="#genMacro"/>
+                                </VBox>
+                                <CheckBox fx:id="soundCheck" selected="false" text="Play sound" style="-fx-text-fill: #ffff9e;"/>
 
 
-                     </children>
-                  </VBox>
-               </children>
-            </VBox>
-            <VBox style="-fx-padding: 30;"  minWidth="128" fillWidth="true">
-   
-                <children>
-                    <Pane maxWidth="512" maxHeight="256" minHeight="256" minWidth="512" style="-fx-background-color: #1e2029;">
-                        <Canvas fx:id="waveDrawCvs" height="256" width="512" />
-                    </Pane>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+                <VBox style="-fx-padding: 30;"  minWidth="128" fillWidth="true">
+
+                    <children>
+                        <Pane maxWidth="512" maxHeight="256" minHeight="256" minWidth="512" style="-fx-background-color: #1e2029;">
+                            <Canvas fx:id="waveDrawCvs" height="256" width="512" />
+                        </Pane>
                         <AnchorPane prefHeight="23.0" >
-                           <children>
-                               <HBox>
-                                   <Slider fx:id="lenSlider" blockIncrement="1.0" majorTickUnit="1.0" min="1" max="256.0" minWidth="512" snapToTicks="true" styleClass="mySliders" />
-                                   <Label fx:id="lenLabel" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Length : 32" />
-                               </HBox>
-   
-                           </children>
-                        </AnchorPane>
-                               <HBox>
-                                   <Slider fx:id="heiSlider" blockIncrement="1.0" majorTickUnit="1.0" max="255.0" min="1" minWidth="512" snapToTicks="true" styleClass="mySliders" />
-                                   <Label fx:id="heiLabel" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Height : 31" />
-                               </HBox>
-   
-               </children>
-                <ScrollPane fitToWidth="true" fx:id="opList">
-                    <VBox fillWidth="true" fx:id="opBox" style="-fx-background-color: #1e2029;">
+                            <children>
+                                <HBox>
+                                    <Slider fx:id="lenSlider" blockIncrement="1.0" majorTickUnit="1.0" min="1" max="256.0" minWidth="512" snapToTicks="true" styleClass="mySliders" />
+                                    <Label fx:id="lenLabel" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Length : 32" />
+                                </HBox>
 
-                    </VBox>
-                </ScrollPane>
-            </VBox>
-         </children>
-      </HBox>
-   </children>
-   </VBox>
+                            </children>
+                        </AnchorPane>
+                        <HBox>
+                            <Slider fx:id="heiSlider" blockIncrement="1.0" majorTickUnit="1.0" max="255.0" min="1" minWidth="512" snapToTicks="true" styleClass="mySliders" />
+                            <Label fx:id="heiLabel" layoutY="-1.0" style="-fx-text-fill: #ffff9e;" text="Height : 31" />
+                        </HBox>
+
+                    </children>
+                    <ScrollPane fitToWidth="true" fx:id="opList">
+                        <VBox fillWidth="true" fx:id="opBox" style="-fx-background-color: #1e2029;">
+
+                        </VBox>
+                    </ScrollPane>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</VBox>

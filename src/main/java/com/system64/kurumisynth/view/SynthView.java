@@ -33,6 +33,10 @@ import static com.sun.javafx.util.Utils.clamp;
 
 public class SynthView {
     @FXML
+    private Slider oversampleSlider;
+    @FXML
+    private Label overSampleLabel;
+    @FXML
     private CheckBox soundCheck;
     @FXML
     private javafx.scene.control.TextArea macOutTA;
@@ -175,6 +179,7 @@ public class SynthView {
         lenSlider.valueProperty().bindBidirectional(synthVM.waveLenProp());
         heiSlider.valueProperty().bindBidirectional(synthVM.waveHeiProp());
         gainSlider.valueProperty().bindBidirectional(synthVM.gainProp());
+        oversampleSlider.valueProperty().bindBidirectional(synthVM.oversampleProp());
     }
     void addListeners() {
         algSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -183,9 +188,12 @@ public class SynthView {
             algLabel.setText("Algorithm : " + synthVM.algProp().get());
             Globals.setStringTextField();
             redrawOpWaves();
-            //synthVM.algProp().set(newVal.byteValue());
-            //System.out.println(synthVM.algProp());
-            //synth.setAlgorithm(newVal.byteValue());
+        });
+
+        oversampleSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            oversampleSlider.setValue(newVal.intValue());
+            overSampleLabel.setText("Oversample : x" + synthVM.oversampleProp().get());
+            redrawOpWaves();
         });
 
         lenSlider.valueProperty().addListener((obs, oldVal, newVal) -> {

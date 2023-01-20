@@ -95,21 +95,51 @@ public class Synth {
                 operators[i] = new Operator(1.0f, 0, 0, 1.0f, 0, 1, 0f);*/
     }
 
+    public int getOversample() {
+        return oversample;
+    }
+
+    public void setOversample(int oversample) {
+        this.oversample = oversample;
+    }
+
+    private int oversample = 1;
+
+    public void resetFeedback() {
+        for (Operator op:
+                operators) {
+            op.setPrev(0);
+        }
+    }
+
+
+
+
+
+
     public void synthesize() {
         /*for (Operator op:
                 operators) {
             op.setPrev(0);
         }*/
         ArrayList<Float> myArrayList = new ArrayList<Float>();
-        for (int x = 0; x < waveLen; x++)
+        for (int x = 0; x < waveLen * oversample; x++)
         {
             myArrayList.add(clamp(-1, fm(x) * gain, 1));
         }
         myArrayList = smooth(myArrayList);
         ArrayList<Integer> outList = new ArrayList<Integer>();
-        for(int c = 0; c < waveLen; c++)
+        for(int c = 0; c < myArrayList.size(); c+=oversample)
         {
-            int tmp = Math.round((myArrayList.get(c) + 1) * ((float) waveHeight / 2));
+            // Calculate sum before avg
+            float res = 0;
+            for(int i = 0; i < oversample; i++)
+            {
+                res += myArrayList.get(c + i);
+            }
+            // doing avg
+            res = res / (float) oversample;
+            int tmp = Math.round((res + 1) * ((float) waveHeight / 2));
             //System.out.println(tmp);
             outList.add(tmp);
         }
@@ -120,15 +150,23 @@ public class Synth {
 
     public ArrayList<Integer> synthesize2() {
         ArrayList<Float> myArrayList = new ArrayList<Float>();
-        for (int x = 0; x < waveLen; x++)
+        for (int x = 0; x < waveLen * oversample; x++)
         {
             myArrayList.add(clamp(-1, fm(x) * gain, 1));
         }
         myArrayList = smooth(myArrayList);
         ArrayList<Integer> outList = new ArrayList<Integer>();
-        for(int c = 0; c < waveLen; c++)
+        for(int c = 0; c < myArrayList.size(); c+=oversample)
         {
-            int tmp = Math.round((myArrayList.get(c) + 1) * ((float) waveHeight / 2));
+            // Calculate sum before avg
+            float res = 0;
+            for(int i = 0; i < oversample; i++)
+            {
+                res += myArrayList.get(c + i);
+            }
+            // doing avg
+            res = res / (float) oversample;
+            int tmp = Math.round((res + 1) * ((float) waveHeight / 2));
             //System.out.println(tmp);
             outList.add(tmp);
         }
@@ -248,6 +286,17 @@ public class Synth {
         return op.oscillate(x + modValue + op.getFB()) * op.getVolume(macro);
     }
 
+    boolean[][] matrix = {
+            {false, false, false, false},
+            {true , false, false, false},
+            {false, true , false, false},
+            {false, false, true , false},
+    };
+
+    boolean matrixEnabled = true;
+
+    float[] samples = {0.0f, 0.0f, 0.0f, 0.0f};
+
     public float fm(float x) {
         if(operators.size() < 4)
             return 0;
@@ -256,8 +305,83 @@ public class Synth {
         Operator op3 = operators.get(2);
         Operator op4 = operators.get(3);
 
-        x = x / waveLen;
-        //System.out.println(operators.size());
+        if(matrixEnabled) {
+            float[] out = {0.0f, 0.0f, 0.0f, 0.0f};
+
+
+            x = x / (float) (waveLen * oversample);
+
+            for(int operator = 0; operator < 4; operator++)
+            {
+                float sum = 0.0f;
+                for(int modulator = 0; modulator < 4; modulator++)
+                {
+                    sum += matrix[operator][modulator] ? samples[modulator] : 0.0f;
+                }
+                samples[operator] = logicMod(x, sum, operators.get(operator));
+                operators.get(operator).setPrev(samples[operator]);
+            }
+            return samples[3];
+
+//            samples[0] = logicMod(x,
+//                    (matrix[0][0] ? samples[0] : 0) +
+//                            (matrix[0][1] ? samples[1] : 0) +
+//                            (matrix[0][2] ? samples[2] : 0) +
+//                            (matrix[0][3] ? samples[3] : 0),
+//                    op1
+//            );
+//            op1.setPrev(samples[0]);
+//
+//            samples[1] = logicMod(x,
+//                    (matrix[1][0] ? samples[0] : 0) +
+//                            (matrix[1][1] ? samples[1] : 0) +
+//                            (matrix[1][2] ? samples[2] : 0) +
+//                            (matrix[1][3] ? samples[3] : 0),
+//                    op2
+//            );
+//            op2.setPrev(samples[1]);
+//
+//            samples[2] = logicMod(x,
+//                    (matrix[2][0] ? samples[0] : 0) +
+//                            (matrix[2][1] ? samples[1] : 0) +
+//                            (matrix[2][2] ? samples[2] : 0) +
+//                            (matrix[2][3] ? samples[3] : 0),
+//                    op3
+//            );
+//            op3.setPrev(samples[2]);
+//
+//            samples[3] = logicMod(x,
+//                    (matrix[3][0] ? samples[0] : 0) +
+//                            (matrix[3][1] ? samples[1] : 0) +
+//                            (matrix[3][2] ? samples[2] : 0) +
+//                            (matrix[3][3] ? samples[3] : 0),
+//                    op4
+//            );
+//            op4.setPrev(samples[3]);
+//            //System.out.println(samples[1]);
+//            //for(int modY = 0; modY < 4; modY++) {
+//            //
+//            //    float sum = 0.0f;
+//            //    for(int modX = 0; modX < 4; modX++)
+//            //    {
+//            //        //System.out.println(matrix[modY][modX]);
+//            //        if(matrix[modY][modX])
+//            //        {
+//            //            Operator op = operators.get(modX);
+//            //            float smp = op.oscillate(x + op.getFB()) * op.getVolume(macro);
+//            //            op.setPrev(smp);
+//            //            sum += smp;
+//            //        }
+//            //    }
+//            //    out[modY] = logicMod(x, sum, operators.get(modY));
+//            //    operators.get(modY).setPrev(out[modY]);
+//            //    System.out.println(sum);
+//            //}
+//
+//            return samples[3];
+        }
+
+
 
         switch (algorithm)
         {

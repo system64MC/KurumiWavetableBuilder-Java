@@ -1,15 +1,12 @@
 package com.system64.kurumisynth.viewmodel;
 
-import com.sun.media.sound.WaveFileWriter;
 import com.system64.kurumisynth.model.Globals;
 import com.system64.kurumisynth.model.Operator;
 import com.system64.kurumisynth.model.Synth;
 import javafx.beans.property.*;
 
-import javax.sound.sampled.AudioFileFormat;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class SynthViewModel {
     private IntegerProperty algProp = new SimpleIntegerProperty();
@@ -21,6 +18,7 @@ public class SynthViewModel {
     private FloatProperty gainProp = new SimpleFloatProperty();
     private IntegerProperty waveLenProp = new SimpleIntegerProperty();
     private IntegerProperty waveHeiProp = new SimpleIntegerProperty();
+    private IntegerProperty oversampleProp = new SimpleIntegerProperty();
 
     private Synth synthModel;
 
@@ -29,6 +27,7 @@ public class SynthViewModel {
         Globals.synth = synthModel;
         waveLenProp.set(synthModel.getWaveLen());
         waveHeiProp.set(synthModel.getWaveHeight());
+        oversampleProp.set(synthModel.getOversample());
         System.out.println("Init Synth VM");
         setListeners();
         //algProp().addListener(e -> setAlgPropAction());
@@ -38,11 +37,20 @@ public class SynthViewModel {
         algProp.addListener((obs, oldVal, newVal) -> {
             synthModel.setAlgorithm(newVal.byteValue());
             synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+
+        oversampleProp.addListener((obs, oldVal, newVal) -> {
+            synthModel.setOversample(newVal.intValue());
+            synthModel.synthesize();
+            synthModel.synthesize();
             Globals.drawWaveOut();
         });
 
         waveLenProp.addListener((obs, oldVal, newVal) -> {
             synthModel.setWaveLen(newVal.intValue());
+            synthModel.synthesize();
             synthModel.synthesize();
             Globals.drawWaveOut();
         });
@@ -50,11 +58,13 @@ public class SynthViewModel {
         waveHeiProp.addListener((obs, oldVal, newVal) -> {
             synthModel.setWaveHeight(newVal.intValue());
             synthModel.synthesize();
+            synthModel.synthesize();
             Globals.drawWaveOut();
         });
 
         gainProp.addListener((obs, oldVal, newVal) -> {
             synthModel.setGain(newVal.floatValue());
+            synthModel.synthesize();
             synthModel.synthesize();
             Globals.drawWaveOut();
         });
@@ -62,6 +72,7 @@ public class SynthViewModel {
         macroProp.addListener((obs, oldVal, newVal) -> {
             synthModel.setMacro(newVal.intValue());
             synthModel.synthesize();
+            //synthModel.resetFeedback();
             // Sussy feedback fix...
             synthModel.synthesize();
             Globals.drawWaveOut();
@@ -70,11 +81,13 @@ public class SynthViewModel {
         macroLenProp.addListener((obs, oldVal, newVal) -> {
             synthModel.setMacLen(newVal.intValue());
             synthModel.synthesize();
+            synthModel.synthesize();
             Globals.drawWaveOut();
         });
 
         smoothWinProp.addListener((obs, oldVal, newVal) -> {
             synthModel.setSmoothWin(newVal.byteValue());
+            synthModel.synthesize();
             synthModel.synthesize();
             Globals.drawWaveOut();
         });
@@ -119,6 +132,10 @@ public class SynthViewModel {
 
     public IntegerProperty waveLenProp() {
         return this.waveLenProp;
+    }
+
+    public IntegerProperty oversampleProp() {
+        return this.oversampleProp;
     }
 
     public IntegerProperty waveHeiProp() {
@@ -339,7 +356,6 @@ public class SynthViewModel {
         if(!header.equals("KWTB"))
             return false;
 
-        System.out.println(index);
 
         // Version check
         int versionLSB = (((int) data[index]) + 256) & 0xFF;
@@ -388,7 +404,6 @@ public class SynthViewModel {
             int fbMSB = (((int) data[index + 1]) + 256) & 0xFF;
             int myFB = (fbMSB << 8) | (fbLSB);
             opVM.feedbackProp().set((float) myFB / 10000.0f);
-            System.out.println("FB LOAD : " +  opVM.feedbackProp().get());
             index += 2;
 
             // Mult
@@ -472,9 +487,9 @@ public class SynthViewModel {
                 int[] morph = new int[mLen];
                 for (int j = 0; j < mLen; j++)
                     morph[j] = (((int) data[index + j]) + 256) & 0xFF;
-                opVM.getOpModel().setWavetable(morph);
-                opVM.waveStrProp().set(opVM.getMorphStr());
-                index += wLen;
+                opVM.getOpModel().setWavetableMorph(morph);
+                opVM.morphStrProp().set(opVM.getMorphStr());
+                index += mLen;
             }
 
             // ADSR data
@@ -542,7 +557,6 @@ public class SynthViewModel {
             out.add((byte) (phase >>> 8)); // MSB
 
             // Feedback
-            //System.out.println("FEEDBACK = " + op.getFeedback());
             int fb = (int) (op.getFeedback() * 10000); // converts float to int
             out.add((byte) (fb & 0xFF)); // LSB
             out.add((byte) (fb >>> 8)); // MSB

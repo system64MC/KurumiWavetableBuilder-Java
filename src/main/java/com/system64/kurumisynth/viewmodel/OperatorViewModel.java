@@ -256,11 +256,13 @@ public class OperatorViewModel {
         tlVolumeProp.addListener((obs, oldVal, newVal) -> {
             opModel.setTl(newVal.floatValue());
             Globals.synth.synthesize();
+            Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
 
         phaseProp.addListener((obs, oldVal, newVal) -> {
             opModel.setPhase(newVal.floatValue());
+            Globals.synth.synthesize();
             Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
@@ -268,11 +270,13 @@ public class OperatorViewModel {
         feedbackProp.addListener((obs, oldVal, newVal) -> {
             opModel.setFeedback(newVal.floatValue());
             Globals.synth.synthesize();
+            Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
 
         waveProp.addListener((obs, oldVal, newVal) -> {
             opModel.setWaveformId(newVal.intValue());
+            Globals.synth.synthesize();
             Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
@@ -280,11 +284,13 @@ public class OperatorViewModel {
         multProp.addListener((obs, oldVal, newVal) -> {
             opModel.setMult(newVal.intValue());
             Globals.synth.synthesize();
+            Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
 
         interpolationProp.addListener((obs, oldVal, newVal) -> {
             opModel.setInterpolation(newVal.intValue());
+            Globals.synth.synthesize();
             Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
@@ -292,17 +298,20 @@ public class OperatorViewModel {
         modProp.addListener((obs, oldVal, newVal) -> {
             opModel.setModMode(newVal.intValue());
             Globals.synth.synthesize();
+            Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
 
         waveStrProp().addListener((obs, oldVal, newVal) -> {
             strToWT();
             Globals.synth.synthesize();
+            Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
 
         volStrProp.addListener((obs, oldVal, newVal) -> {
             strToEnv();
+            Globals.synth.synthesize();
             Globals.synth.synthesize();
             Globals.drawWaveOut();
 
@@ -311,6 +320,7 @@ public class OperatorViewModel {
         phaseStrProp.addListener((obs, oldVal, newVal) -> {
             strToPhase();
             Globals.synth.synthesize();
+            Globals.synth.synthesize();
             Globals.drawWaveOut();
 
         });
@@ -318,11 +328,13 @@ public class OperatorViewModel {
         phaseModProp.addListener((obs, oldVal, newVal) -> {
             opModel.setPhaseMod(phaseModProp.get());
             Globals.synth.synthesize();
+            Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
 
         attackProp.addListener((obs, oldVal, newVal) -> {
             opModel.getAdsr().setAttack(newVal.intValue());
+            Globals.synth.synthesize();
             Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
@@ -330,11 +342,13 @@ public class OperatorViewModel {
         decayProp.addListener((obs, oldVal, newVal) -> {
             opModel.getAdsr().setDecay(newVal.intValue());
             Globals.synth.synthesize();
+            Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
 
         susProp.addListener((obs, oldVal, newVal) -> {
             opModel.getAdsr().setSustain(newVal.floatValue());
+            Globals.synth.synthesize();
             Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
@@ -342,11 +356,13 @@ public class OperatorViewModel {
         revPhaseprop.addListener((obs, oldVal, newVal) -> {
             opModel.setPhaseRev(newVal.booleanValue());
             Globals.synth.synthesize();
+            Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
 
         detuneProp.addListener((obs, oldVal, newVal) -> {
             opModel.setDetune(newVal.intValue());
+            Globals.synth.synthesize();
             Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
@@ -354,11 +370,13 @@ public class OperatorViewModel {
         isADSR.addListener((obs, oldVal, newVal) -> {
             opModel.setUseADSR(newVal.booleanValue());
             Globals.synth.synthesize();
+            Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
 
         standardPhaseProp.addListener((obs, oldVal, newVal) -> {
             opModel.setStandardPhase(newVal.booleanValue());
+            Globals.synth.synthesize();
             Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
@@ -366,17 +384,20 @@ public class OperatorViewModel {
         morphStrProp.addListener((obs, oldVal, newVal) -> {
             strToMorph();
             Globals.synth.synthesize();
+            Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
 
         morphFramesProp.addListener((obs, oldVal, newVal) -> {
             opModel.setMorphFrames(newVal.intValue());
             Globals.synth.synthesize();
+            Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
 
         isMorphEnabledProp.addListener((obs, oldVal, newVal) -> {
             opModel.setMorphDisabled(newVal.booleanValue());
+            Globals.synth.synthesize();
             Globals.synth.synthesize();
             Globals.drawWaveOut();
         });
