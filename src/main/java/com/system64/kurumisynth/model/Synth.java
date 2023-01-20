@@ -286,7 +286,7 @@ public class Synth {
         return op.oscillate(x + modValue + op.getFB()) * op.getVolume(macro);
     }
 
-    boolean[][] matrix = {
+    public boolean[][] matrix = {
             {false, false, false, false},
             {true , false, false, false},
             {false, true , false, false},

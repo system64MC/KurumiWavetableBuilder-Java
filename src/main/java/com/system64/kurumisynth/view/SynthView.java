@@ -90,6 +90,26 @@ public class SynthView {
     @FXML
     private Label algLabel;
 
+    @FXML private CheckBox matrixBox11;
+    @FXML private CheckBox matrixBox12;
+    @FXML private CheckBox matrixBox13;
+    @FXML private CheckBox matrixBox14;
+
+    @FXML private CheckBox matrixBox21;
+    @FXML private CheckBox matrixBox22;
+    @FXML private CheckBox matrixBox23;
+    @FXML private CheckBox matrixBox24;
+
+    @FXML private CheckBox matrixBox31;
+    @FXML private CheckBox matrixBox32;
+    @FXML private CheckBox matrixBox33;
+    @FXML private CheckBox matrixBox34;
+
+    @FXML private CheckBox matrixBox41;
+    @FXML private CheckBox matrixBox42;
+    @FXML private CheckBox matrixBox43;
+    @FXML private CheckBox matrixBox44;
+
     FileChooser exportWav = new FileChooser();
     FileChooser saveFile = new FileChooser();
 
@@ -180,6 +200,23 @@ public class SynthView {
         heiSlider.valueProperty().bindBidirectional(synthVM.waveHeiProp());
         gainSlider.valueProperty().bindBidirectional(synthVM.gainProp());
         oversampleSlider.valueProperty().bindBidirectional(synthVM.oversampleProp());
+
+        matrixBox11.selectedProperty().bindBidirectional(synthVM.matrix11Prop());
+        matrixBox12.selectedProperty().bindBidirectional(synthVM.matrix12Prop());
+        matrixBox13.selectedProperty().bindBidirectional(synthVM.matrix13Prop());
+        matrixBox14.selectedProperty().bindBidirectional(synthVM.matrix14Prop());
+        matrixBox21.selectedProperty().bindBidirectional(synthVM.matrix21Prop());
+        matrixBox22.selectedProperty().bindBidirectional(synthVM.matrix22Prop());
+        matrixBox23.selectedProperty().bindBidirectional(synthVM.matrix23Prop());
+        matrixBox24.selectedProperty().bindBidirectional(synthVM.matrix24Prop());
+        matrixBox31.selectedProperty().bindBidirectional(synthVM.matrix31Prop());
+        matrixBox32.selectedProperty().bindBidirectional(synthVM.matrix32Prop());
+        matrixBox33.selectedProperty().bindBidirectional(synthVM.matrix33Prop());
+        matrixBox34.selectedProperty().bindBidirectional(synthVM.matrix34Prop());
+        matrixBox41.selectedProperty().bindBidirectional(synthVM.matrix41Prop());
+        matrixBox42.selectedProperty().bindBidirectional(synthVM.matrix42Prop());
+        matrixBox43.selectedProperty().bindBidirectional(synthVM.matrix43Prop());
+        matrixBox44.selectedProperty().bindBidirectional(synthVM.matrix44Prop());
     }
     void addListeners() {
         algSlider.valueProperty().addListener((obs, oldVal, newVal) -> {

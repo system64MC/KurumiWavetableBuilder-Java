@@ -45,9 +45,14 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.canvas.Canvas?>
 <VBox style="-fx-background-color: #14161F;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.system64.kurumisynth.view.SynthView">
     <children>
     <MenuBar>
@@ -93,6 +98,60 @@
          <children>
             <VBox style="-fx-padding: 20;">
                <children>
+
+                   <GridPane>
+                       <columnConstraints>
+                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="0.0" />
+                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="0.0" />
+                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="0.0" />
+                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="0.0" />
+                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="0.0" />
+                       </columnConstraints>
+                       <rowConstraints>
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       </rowConstraints>
+                       <children>
+                           <Label style="-fx-text-fill: #ffff9e;" text="Y\X" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+
+
+                           <Label style="-fx-text-fill: #ffff9e;" text="1" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                           <Label style="-fx-text-fill: #ffff9e;" text="2" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                           <Label style="-fx-text-fill: #ffff9e;" text="3" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                           <Label style="-fx-text-fill: #ffff9e;" text="4" GridPane.columnIndex="4" GridPane.rowIndex="0"/>
+
+                           <Label style="-fx-text-fill: #ffff9e;" text="1" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                           <Label style="-fx-text-fill: #ffff9e;" text="2" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                           <Label style="-fx-text-fill: #ffff9e;" text="3" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                           <Label style="-fx-text-fill: #ffff9e;" text="4" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+
+
+                           <CheckBox fx:id="matrixBox11" mnemonicParsing="false"  GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                           <CheckBox fx:id="matrixBox12" mnemonicParsing="false"  GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                           <CheckBox fx:id="matrixBox13" mnemonicParsing="false"  GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                           <CheckBox fx:id="matrixBox14" mnemonicParsing="false"  GridPane.columnIndex="4" GridPane.rowIndex="1" />
+
+                           <CheckBox fx:id="matrixBox21" mnemonicParsing="false"  GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                           <CheckBox fx:id="matrixBox22" mnemonicParsing="false"  GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                           <CheckBox fx:id="matrixBox23" mnemonicParsing="false"  GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                           <CheckBox fx:id="matrixBox24" mnemonicParsing="false"  GridPane.columnIndex="4" GridPane.rowIndex="2" />
+
+                           <CheckBox fx:id="matrixBox31" mnemonicParsing="false"  GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                           <CheckBox fx:id="matrixBox32" mnemonicParsing="false"  GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                           <CheckBox fx:id="matrixBox33" mnemonicParsing="false"  GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                           <CheckBox fx:id="matrixBox34" mnemonicParsing="false"  GridPane.columnIndex="4" GridPane.rowIndex="3" />
+
+                           <CheckBox fx:id="matrixBox41" mnemonicParsing="false"  GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                           <CheckBox fx:id="matrixBox42" mnemonicParsing="false"  GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                           <CheckBox fx:id="matrixBox43" mnemonicParsing="false"  GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                           <CheckBox fx:id="matrixBox44" mnemonicParsing="false"  GridPane.columnIndex="4" GridPane.rowIndex="4" />
+
+                       </children>
+                   </GridPane>
+
                    <ImageView fx:id="algDisplay" pickOnBounds="true" preserveRatio="false" scaleX="1" scaleY="1" smooth="false">
 
                    </ImageView>
@@ -152,6 +211,7 @@
 
                      </children>
                   </VBox>
+
                </children>
             </VBox>
             <VBox fillWidth="true" minWidth="128" style="-fx-padding: 30;">

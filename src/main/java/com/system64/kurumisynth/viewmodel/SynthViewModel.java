@@ -20,6 +20,43 @@ public class SynthViewModel {
     private IntegerProperty waveHeiProp = new SimpleIntegerProperty();
     private IntegerProperty oversampleProp = new SimpleIntegerProperty();
 
+
+    private BooleanProperty matrix11Prop = new SimpleBooleanProperty();
+    private BooleanProperty matrix12Prop = new SimpleBooleanProperty();
+    private BooleanProperty matrix13Prop = new SimpleBooleanProperty();
+    private BooleanProperty matrix14Prop = new SimpleBooleanProperty();
+    private BooleanProperty matrix21Prop = new SimpleBooleanProperty();
+    private BooleanProperty matrix22Prop = new SimpleBooleanProperty();
+    private BooleanProperty matrix23Prop = new SimpleBooleanProperty();
+    private BooleanProperty matrix24Prop = new SimpleBooleanProperty();
+    private BooleanProperty matrix31Prop = new SimpleBooleanProperty();
+    private BooleanProperty matrix32Prop = new SimpleBooleanProperty();
+    private BooleanProperty matrix33Prop = new SimpleBooleanProperty();
+    private BooleanProperty matrix34Prop = new SimpleBooleanProperty();
+    private BooleanProperty matrix41Prop = new SimpleBooleanProperty();
+    private BooleanProperty matrix42Prop = new SimpleBooleanProperty();
+    private BooleanProperty matrix43Prop = new SimpleBooleanProperty();
+    private BooleanProperty matrix44Prop = new SimpleBooleanProperty();
+
+    public BooleanProperty matrix11Prop() { return this.matrix11Prop; }
+    public BooleanProperty matrix12Prop() { return this.matrix12Prop; }
+    public BooleanProperty matrix13Prop() { return this.matrix13Prop; }
+    public BooleanProperty matrix14Prop() { return this.matrix14Prop; }
+    public BooleanProperty matrix21Prop() { return this.matrix21Prop; }
+    public BooleanProperty matrix22Prop() { return this.matrix22Prop; }
+    public BooleanProperty matrix23Prop() { return this.matrix23Prop; }
+    public BooleanProperty matrix24Prop() { return this.matrix24Prop; }
+    public BooleanProperty matrix31Prop() { return this.matrix31Prop; }
+    public BooleanProperty matrix32Prop() { return this.matrix32Prop; }
+    public BooleanProperty matrix33Prop() { return this.matrix33Prop; }
+    public BooleanProperty matrix34Prop() { return this.matrix34Prop; }
+    public BooleanProperty matrix41Prop() { return this.matrix41Prop; }
+    public BooleanProperty matrix42Prop() { return this.matrix42Prop; }
+    public BooleanProperty matrix43Prop() { return this.matrix43Prop; }
+    public BooleanProperty matrix44Prop() { return this.matrix44Prop; }
+
+
+
     private Synth synthModel;
 
     public SynthViewModel() {
@@ -34,6 +71,104 @@ public class SynthViewModel {
     }
 
     private void setListeners() {
+
+        matrix11Prop.addListener((obs, oldVal, newVal) -> {
+            synthModel.matrix[0][0] = newVal.booleanValue();
+            synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+        matrix12Prop.addListener((obs, oldVal, newVal) -> {
+            synthModel.matrix[0][1] = newVal.booleanValue();
+            synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+        matrix13Prop.addListener((obs, oldVal, newVal) -> {
+            synthModel.matrix[0][2] = newVal.booleanValue();
+            synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+        matrix14Prop.addListener((obs, oldVal, newVal) -> {
+            synthModel.matrix[0][3] = newVal.booleanValue();
+            synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+        matrix21Prop.addListener((obs, oldVal, newVal) -> {
+            synthModel.matrix[1][0] = newVal.booleanValue();
+            synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+        matrix22Prop.addListener((obs, oldVal, newVal) -> {
+            synthModel.matrix[1][1] = newVal.booleanValue();
+            synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+        matrix23Prop.addListener((obs, oldVal, newVal) -> {
+            synthModel.matrix[1][2] = newVal.booleanValue();
+            synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+        matrix24Prop.addListener((obs, oldVal, newVal) -> {
+            synthModel.matrix[1][3] = newVal.booleanValue();
+            synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+        matrix31Prop.addListener((obs, oldVal, newVal) -> {
+            synthModel.matrix[2][0] = newVal.booleanValue();
+            synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+        matrix32Prop.addListener((obs, oldVal, newVal) -> {
+            synthModel.matrix[2][1] = newVal.booleanValue();
+            synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+        matrix33Prop.addListener((obs, oldVal, newVal) -> {
+            synthModel.matrix[2][2] = newVal.booleanValue();
+            synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+        matrix34Prop.addListener((obs, oldVal, newVal) -> {
+            synthModel.matrix[2][3] = newVal.booleanValue();
+            synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+        matrix41Prop.addListener((obs, oldVal, newVal) -> {
+            synthModel.matrix[3][0] = newVal.booleanValue();
+            synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+        matrix42Prop.addListener((obs, oldVal, newVal) -> {
+            synthModel.matrix[3][1] = newVal.booleanValue();
+            synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+        matrix43Prop.addListener((obs, oldVal, newVal) -> {
+            synthModel.matrix[3][2] = newVal.booleanValue();
+            synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+        matrix44Prop.addListener((obs, oldVal, newVal) -> {
+            synthModel.matrix[3][3] = newVal.booleanValue();
+            synthModel.synthesize();
+            synthModel.synthesize();
+            Globals.drawWaveOut();
+        });
+
         algProp.addListener((obs, oldVal, newVal) -> {
             synthModel.setAlgorithm(newVal.byteValue());
             synthModel.synthesize();
